@@ -39,3 +39,10 @@ data/*.jsonl
 
 # Local evaluation results
 evals/results/
+
+# Evaluation temporary outputs
+evals/smoke_results.json
+
+# Python generated files
+__pycache__/
+*.py[cod]

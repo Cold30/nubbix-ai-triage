@@ -1,0 +1,3 @@
+{"id":"S001","query":"Mi factura tiene un cobro duplicado.","expected_category":"billing"}
+{"id":"S002","query":"El sistema devuelve un error al generar reportes.","expected_category":"technical"}
+{"id":"S003","query":"Necesito cambiar los permisos de un usuario.","expected_category":"account"}
