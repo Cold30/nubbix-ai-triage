@@ -1,0 +1,27 @@
+name: nubbix-triage
+version: v2
+strategy: few-shot
+
+system: |
+  Ejemplos de clasificación:
+
+  Ejemplo 1:
+    Consulta: "Me cobraron dos veces el abono mensual."
+    Categoría: billing
+
+  Ejemplo 2:
+    Consulta: "La aplicación devuelve un error al generar reportes."
+    Categoría: technical
+
+  Ejemplo 3:
+    Consulta: "No puedo recuperar mi contraseña."
+    Categoría: account
+
+  Ejemplo 4:
+    Consulta: "¿Ofrecen capacitaciones para nuevos usuarios?"
+    Categoría: other
+
+
+user_template: |
+  Consulta del cliente:
+  {query}
