@@ -1,0 +1,242 @@
+{
+  "prompt_version": "triage_v2",
+  "scores": {
+    "total": 30,
+    "correct": 30,
+    "accuracy": 1.0,
+    "per_category": {
+      "billing": {
+        "correct": 8,
+        "total": 8,
+        "accuracy": 1.0
+      },
+      "technical": {
+        "correct": 8,
+        "total": 8,
+        "accuracy": 1.0
+      },
+      "account": {
+        "correct": 7,
+        "total": 7,
+        "accuracy": 1.0
+      },
+      "other": {
+        "correct": 7,
+        "total": 7,
+        "accuracy": 1.0
+      }
+    }
+  },
+  "results": [
+    {
+      "id": "T001",
+      "expected_category": "billing",
+      "predicted_category": "billing",
+      "correct": true,
+      "error": null
+    },
+    {
+      "id": "T002",
+      "expected_category": "billing",
+      "predicted_category": "billing",
+      "correct": true,
+      "error": null
+    },
+    {
+      "id": "T003",
+      "expected_category": "billing",
+      "predicted_category": "billing",
+      "correct": true,
+      "error": null
+    },
+    {
+      "id": "T004",
+      "expected_category": "technical",
+      "predicted_category": "technical",
+      "correct": true,
+      "error": null
+    },
+    {
+      "id": "T005",
+      "expected_category": "technical",
+      "predicted_category": "technical",
+      "correct": true,
+      "error": null
+    },
+    {
+      "id": "T006",
+      "expected_category": "technical",
+      "predicted_category": "technical",
+      "correct": true,
+      "error": null
+    },
+    {
+      "id": "T007",
+      "expected_category": "account",
+      "predicted_category": "account",
+      "correct": true,
+      "error": null
+    },
+    {
+      "id": "T008",
+      "expected_category": "account",
+      "predicted_category": "account",
+      "correct": true,
+      "error": null
+    },
+    {
+      "id": "T009",
+      "expected_category": "other",
+      "predicted_category": "other",
+      "correct": true,
+      "error": null
+    },
+    {
+      "id": "T010",
+      "expected_category": "other",
+      "predicted_category": "other",
+      "correct": true,
+      "error": null
+    },
+    {
+      "id": "T011",
+      "expected_category": "billing",
+      "predicted_category": "billing",
+      "correct": true,
+      "error": null
+    },
+    {
+      "id": "T012",
+      "expected_category": "billing",
+      "predicted_category": "billing",
+      "correct": true,
+      "error": null
+    },
+    {
+      "id": "T013",
+      "expected_category": "billing",
+      "predicted_category": "billing",
+      "correct": true,
+      "error": null
+    },
+    {
+      "id": "T014",
+      "expected_category": "billing",
+      "predicted_category": "billing",
+      "correct": true,
+      "error": null
+    },
+    {
+      "id": "T015",
+      "expected_category": "billing",
+      "predicted_category": "billing",
+      "correct": true,
+      "error": null
+    },
+    {
+      "id": "T016",
+      "expected_category": "technical",
+      "predicted_category": "technical",
+      "correct": true,
+      "error": null
+    },
+    {
+      "id": "T017",
+      "expected_category": "technical",
+      "predicted_category": "technical",
+      "correct": true,
+      "error": null
+    },
+    {
+      "id": "T018",
+      "expected_category": "technical",
+      "predicted_category": "technical",
+      "correct": true,
+      "error": null
+    },
+    {
+      "id": "T019",
+      "expected_category": "technical",
+      "predicted_category": "technical",
+      "correct": true,
+      "error": null
+    },
+    {
+      "id": "T020",
+      "expected_category": "technical",
+      "predicted_category": "technical",
+      "correct": true,
+      "error": null
+    },
+    {
+      "id": "T021",
+      "expected_category": "account",
+      "predicted_category": "account",
+      "correct": true,
+      "error": null
+    },
+    {
+      "id": "T022",
+      "expected_category": "account",
+      "predicted_category": "account",
+      "correct": true,
+      "error": null
+    },
+    {
+      "id": "T023",
+      "expected_category": "account",
+      "predicted_category": "account",
+      "correct": true,
+      "error": null
+    },
+    {
+      "id": "T024",
+      "expected_category": "account",
+      "predicted_category": "account",
+      "correct": true,
+      "error": null
+    },
+    {
+      "id": "T025",
+      "expected_category": "account",
+      "predicted_category": "account",
+      "correct": true,
+      "error": null
+    },
+    {
+      "id": "T026",
+      "expected_category": "other",
+      "predicted_category": "other",
+      "correct": true,
+      "error": null
+    },
+    {
+      "id": "T027",
+      "expected_category": "other",
+      "predicted_category": "other",
+      "correct": true,
+      "error": null
+    },
+    {
+      "id": "T028",
+      "expected_category": "other",
+      "predicted_category": "other",
+      "correct": true,
+      "error": null
+    },
+    {
+      "id": "T029",
+      "expected_category": "other",
+      "predicted_category": "other",
+      "correct": true,
+      "error": null
+    },
+    {
+      "id": "T030",
+      "expected_category": "other",
+      "predicted_category": "other",
+      "correct": true,
+      "error": null
+    }
+  ]
+}

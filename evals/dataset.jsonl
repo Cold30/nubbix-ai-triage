@@ -1,0 +1,31 @@
+
+{"id":"T001","query":"Me llegó una factura con un importe mayor al de mi plan contratado. ¿Podrían revisarla?","expected_category":"billing"}
+{"id":"T002","query":"Actualicé mi tarjeta de crédito, pero el pago de la suscripción sigue apareciendo como rechazado.","expected_category":"billing"}
+{"id":"T003","query":"Quiero cancelar mi suscripción antes de que se cobre el próximo mes.","expected_category":"billing"}
+{"id":"T004","query":"Cuando intento exportar un reporte a Excel, aparece un error 500 y la descarga no comienza.","expected_category":"technical"}
+{"id":"T005","query":"La integración con nuestra API dejó de sincronizar los pedidos desde ayer.","expected_category":"technical"}
+{"id":"T006","query":"El panel de administración queda cargando indefinidamente después de seleccionar un cliente.","expected_category":"technical"}
+{"id":"T007","query":"Necesito cambiar el correo electrónico asociado a mi usuario porque ya no tengo acceso al anterior.","expected_category":"account"}
+{"id":"T008","query":"Un empleado nuevo necesita acceso a Nubbix, pero no sé cómo asignarle permisos.","expected_category":"account"}
+{"id":"T009","query":"¿Nubbix ofrece capacitaciones para equipos que recién comienzan a utilizar la plataforma?","expected_category":"other"}
+{"id":"T010","query":"¿Tienen algún programa de referidos para recomendar Nubbix a otras empresas?","expected_category":"other"}
+{"id":"T011","query":"Necesito una copia de las facturas correspondientes a los últimos tres meses.","expected_category":"billing"}
+{"id":"T012","query":"Realicé el pago por transferencia, pero mi suscripción continúa figurando como pendiente.","expected_category":"billing"}
+{"id":"T013","query":"Me aplicaron un descuento promocional, pero no aparece reflejado en la última factura.","expected_category":"billing"}
+{"id":"T014","query":"Quiero conocer la diferencia de precio entre el plan básico y el profesional.","expected_category":"billing"}
+{"id":"T015","query":"Mi suscripción fue renovada automáticamente y quiero consultar si puedo solicitar un reembolso.","expected_category":"billing"}
+{"id":"T016","query":"La aplicación se cierra inesperadamente cada vez que intento editar un producto.","expected_category":"technical"}
+{"id":"T017","query":"Desde la actualización de ayer, el sistema tarda demasiado en cargar los reportes.","expected_category":"technical"}
+{"id":"T018","query":"El webhook de notificaciones responde con error 502 y los eventos no llegan a nuestro servidor.","expected_category":"technical"}
+{"id":"T019","query":"Al subir un archivo CSV, el sistema muestra un error de formato aunque el archivo parece correcto.","expected_category":"technical"}
+{"id":"T020","query":"Los cambios que realizo en el inventario no se sincronizan con la tienda online.","expected_category":"technical"}
+{"id":"T021","query":"Perdí el acceso a mi autenticador de dos factores y no puedo completar el inicio de sesión.","expected_category":"account"}
+{"id":"T022","query":"Quiero eliminar el acceso de un empleado que ya no trabaja en nuestra empresa.","expected_category":"account"}
+{"id":"T023","query":"Necesito actualizar el nombre y los datos de contacto de mi perfil.","expected_category":"account"}
+{"id":"T024","query":"No encuentro la opción para cambiar mi contraseña desde el panel de usuario.","expected_category":"account"}
+{"id":"T025","query":"Un colaborador puede ingresar, pero no tiene permisos para administrar usuarios.","expected_category":"account"}
+{"id":"T026","query":"¿Nubbix cuenta con documentación para aprender a utilizar todas las funciones?","expected_category":"other"}
+{"id":"T027","query":"Estamos evaluando utilizar Nubbix en nuestra empresa y queremos solicitar una demostración.","expected_category":"other"}
+{"id":"T028","query":"¿Tienen algún canal para enviar sugerencias sobre nuevas funcionalidades?","expected_category":"other"}
+{"id":"T029","query":"¿Dónde puedo consultar las novedades y próximas actualizaciones del producto?","expected_category":"other"}
+{"id":"T030","query":"Quisiera saber si Nubbix participará en algún evento tecnológico este año.","expected_category":"other"}
