@@ -5,6 +5,7 @@ import pytest
 from types import SimpleNamespace
 from pydantic import ValidationError
 
+from src.llm_client import TransientLLMError
 from src.triage import TriageService
 from src.guardrails import GuardrailError
 
@@ -84,3 +85,36 @@ def test_rejects_invalid_input_without_calling_provider():
         service.classify("   ")
 
     assert provider.call_count == 0
+
+def test_service_recovers_from_transient_provider_error(monkeypatch):
+    """Retry a temporary provider failure and return valid classification."""
+    monkeypatch.setattr("src.retry.time.sleep", lambda _: None)
+
+    class FakeProvider:
+        def __init__(self):
+            self.calls = 0
+
+        def generate(self, prompt: str):
+            self.calls += 1
+
+            if self.calls == 1:
+                raise TransientLLMError("Temporary HTTP 503")
+
+            return SimpleNamespace(
+                text=(
+                    '{"answer": "Revisá la configuración de la aplicación.", '
+                    '"confidence": 0.9, '
+                    '"category": "technical", '
+                    '"actions": ["Verificar la conexión"]}'
+                )
+            )
+
+    provider = FakeProvider()
+    service = TriageService(provider=provider, max_retries=0)
+
+    response = service.classify(
+        "La aplicación muestra un error al cargar reportes."
+    )
+
+    assert response.category == "technical"
+    assert provider.calls == 2

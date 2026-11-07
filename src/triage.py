@@ -5,6 +5,7 @@ from src.prompting import build_prompt
 from src.metrics import MetricsLogger
 from src.pricing import estimate_cost_usd
 from src.guardrails import validate_input, validate_output
+from src.retry import retry_transient
 
 
 class TriageService:
@@ -23,7 +24,11 @@ class TriageService:
         prompt = build_prompt(prompt_version, validated_query)
 
         for attempt in range(self.max_retries + 1):
-            response = self.provider.generate(prompt)
+            response = retry_transient(
+                operation=lambda: self.provider.generate(prompt),
+                max_retries=2,
+                base_delay=1.0,
+            )
             
             if self.metrics_logger is not None:
                 self.metrics_logger.log({
