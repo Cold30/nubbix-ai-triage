@@ -4,7 +4,7 @@ from pydantic import ValidationError
 from src.models import TriageResponse
 
 
-def test_respuesta_valida():
+def test_valid_response():
     response = TriageResponse(
         answer="Revisaremos tu factura.",
         confidence=0.95,
@@ -16,7 +16,7 @@ def test_respuesta_valida():
     assert response.confidence == 0.95
 
 
-def test_confianza_invalida():
+def test_invalid_confidence():
     with pytest.raises(ValidationError):
         TriageResponse(
             answer="Revisaremos tu factura.",
@@ -26,7 +26,7 @@ def test_confianza_invalida():
         )
 
 
-def test_categoria_invalida():
+def test_invalid_category():
     with pytest.raises(ValidationError):
         TriageResponse(
             answer="Revisaremos tu factura.",

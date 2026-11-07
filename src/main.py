@@ -1,12 +1,17 @@
 
 import argparse
 import os
+import sys
 
 from dotenv import load_dotenv
 
 from src.provider_factory import create_provider
 from src.triage import TriageService
 from src.metrics import MetricsLogger
+from src.configuration import environment_integer
+from src.guardrails import GuardrailError
+from src.llm_client import LLMProviderError
+from pydantic import ValidationError
 
 
 def main():
@@ -14,7 +19,7 @@ def main():
     load_dotenv()
 
     parser = argparse.ArgumentParser(
-        description="Nubbix AI Support Triage"
+        description="Clasificación de tickets de soporte de Nubbix"
     )
 
     subparsers = parser.add_subparsers(
@@ -24,12 +29,12 @@ def main():
 
     classify_parser = subparsers.add_parser(
         "classify",
-        help="Classify a customer support ticket",
+        help="Clasificar un ticket de soporte",
     )
 
     classify_parser.add_argument(
         "query",
-        help="Customer support ticket text",
+        help="Texto de la consulta de soporte",
     )
 
     classify_parser.add_argument(
@@ -54,7 +59,7 @@ def main():
 
         service = TriageService(
             provider=provider,
-            max_retries=int(os.getenv("LLM_MAX_RETRIES", "2")),
+            max_retries=environment_integer("LLM_MAX_RETRIES", 2),
             metrics_logger=metrics_logger,
         )
 
@@ -67,4 +72,11 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except ValidationError:
+        print("Error: el proveedor no devolvió un JSON válido tras los reintentos.", file=sys.stderr)
+        raise SystemExit(1) from None
+    except (ValueError, OSError, LLMProviderError) as error:
+        print(f"Error: {error}", file=sys.stderr)
+        raise SystemExit(1) from None

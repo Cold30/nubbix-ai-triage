@@ -54,16 +54,17 @@ class TriageService:
                 )
                 return validate_output(validated_response)
 
-            except ValidationError as error:
+            except ValidationError:
                 if attempt == self.max_retries:
                     raise
 
                 prompt = (
                     f"{prompt}\n\n"
-                    "Your previous response did not match the required "
-                    "JSON contract. Return only a valid JSON object with "
-                    "answer, confidence, category, and actions. "
-                    f"Validation error: {error}"
+                    "La respuesta anterior no cumplió el contrato JSON. "
+                    "Devolvé únicamente un objeto JSON con answer (texto), "
+                    "confidence (número entre 0 y 1), category "
+                    "(billing, technical, account u other) y actions (lista de textos). "
+                    "La respuesta y las acciones deben estar en español."
                 )
 
         raise RuntimeError("Unexpected retry loop termination")
