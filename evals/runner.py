@@ -16,12 +16,12 @@ from src.triage import TriageService
 from src.metrics import MetricsLogger
 from src.prompting import PROMPTS_DIR
 
-def save_checkpoint( results: list[dict], output_path: Path, prompt_version: str, ) -> None:
-    """Save partial evaluation results to disk."""
+def save_checkpoint( results: list[dict], output_path: Path, experiment: dict, ) -> None:
+    """Save evaluation results with their experiment identity."""
     output_path.parent.mkdir(parents=True, exist_ok=True)
 
     report = {
-        "prompt_version": prompt_version,
+        "experiment": experiment,
         "results": results,
     }
 
@@ -29,33 +29,25 @@ def save_checkpoint( results: list[dict], output_path: Path, prompt_version: str
         json.dumps(report, indent=2, ensure_ascii=False),
         encoding="utf-8",
     )
-    
-def load_checkpoint( output_path: Path, prompt_version: str, ) -> list[dict]:
-    """Load previously completed evaluation results."""
+
+
+def load_checkpoint( output_path: Path, experiment: dict, ) -> list[dict]:
+    """Load results only when the experiment identity matches."""
     if not output_path.exists():
         return []
 
-    with output_path.open("r", encoding="utf-8") as file:
-        checkpoint = json.load(file)
+    checkpoint = json.loads(
+        output_path.read_text(encoding="utf-8")
+    )
 
-    if checkpoint["prompt_version"] != prompt_version:
-        raise ValueError("Checkpoint prompt version does not match")
+    if checkpoint.get("experiment") != experiment:
+        raise ValueError(
+            "Checkpoint experiment does not match the current dataset, "
+            "prompt, provider, or model"
+        )
 
     return checkpoint["results"]
 
-def save_checkpoint( results: list[dict], output_path: Path, prompt_version: str, ) -> None: 
-    """Save completed evaluation results after each ticket."""
-    output_path.parent.mkdir(parents=True, exist_ok=True)
-
-    report = {
-        "prompt_version": prompt_version,
-        "results": results,
-    }
-
-    output_path.write_text(
-        json.dumps(report, indent=2, ensure_ascii=False),
-        encoding="utf-8",
-    )
 
 def load_dataset(path: Path) -> list[dict]:
     """Load labeled support tickets from a JSONL dataset."""
@@ -95,9 +87,23 @@ def build_experiment_identity( dataset: list[dict], prompt_version: str, provide
     }
 
 
-def run_evaluation( service: TriageService, dataset: list[dict], prompt_version: str, output_path: Path, delay_seconds: float = 0.0, ) -> dict:
+def run_evaluation( service: TriageService, dataset: list[dict], prompt_version: str, output_path: Path, experiment: dict, delay_seconds: float = 0.0,  resume: bool = False, ) -> dict:
     """Evaluate classification quality against labeled tickets."""
-    results = load_checkpoint(output_path, prompt_version)
+    if resume:
+        if not output_path.exists():
+            raise FileNotFoundError(
+                f"No checkpoint to resume: {output_path}"
+            )
+
+        results = load_checkpoint(output_path, experiment)
+    else:
+        if output_path.exists():
+            raise FileExistsError(
+                f"Refusing to overwrite existing evaluation: {output_path}"
+            )
+
+        results = []
+
     completed_ids = {result["id"] for result in results}
 
     for index, ticket in enumerate(dataset, start=1):
@@ -127,8 +133,9 @@ def run_evaluation( service: TriageService, dataset: list[dict], prompt_version:
             "correct": predicted_category == ticket["expected_category"],
             "error": error_message,
         })
-        save_checkpoint(results, output_path, prompt_version)
+        save_checkpoint(results, output_path, experiment)
     return {
+        "experiment": experiment,
         "prompt_version": prompt_version,
         "scores": calculate_scores(results),
         "results": results,
@@ -166,11 +173,32 @@ def main() -> None:
         type=Path,
         default=Path("evals/results.json"),
     )
+    
+    mode = parser.add_mutually_exclusive_group(required=True)
+
+    mode.add_argument(
+        "--fresh",
+        action="store_true",
+        help="Start a new evaluation without overwriting existing results",
+    )
+
+    mode.add_argument(
+        "--resume",
+        action="store_true",
+        help="Resume an existing compatible evaluation",
+    )
 
     args = parser.parse_args()
 
     dataset = load_dataset(args.dataset)
     provider = create_provider(args.provider)
+    
+    experiment = build_experiment_identity(
+        dataset=dataset,
+        prompt_version=args.prompt_version,
+        provider_name=args.provider,
+        model_name=provider.model,
+    )
     
     metrics_logger = MetricsLogger(
         os.getenv("METRICS_PATH", "data/metrics.jsonl")
@@ -187,8 +215,11 @@ def main() -> None:
         dataset=dataset,
         prompt_version=args.prompt_version,
         output_path=args.output,
+        experiment=experiment,
         delay_seconds=6.0,
+        resume=args.resume,
     )
+    
 
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(

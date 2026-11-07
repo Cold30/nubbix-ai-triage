@@ -31,6 +31,13 @@ def test_resume_skips_completed_tickets(tmp_path):
             "expected_category": "technical",
         },
     ]
+    
+    experiment = build_experiment_identity(
+        dataset=dataset,
+        prompt_version="triage_v1",
+        provider_name="gemini",
+        model_name="test-model",
+    )
 
     save_checkpoint(
         results=[
@@ -43,7 +50,7 @@ def test_resume_skips_completed_tickets(tmp_path):
             }
         ],
         output_path=output_path,
-        prompt_version="triage_v1",
+        experiment=experiment,
     )
 
     service = FakeService()
@@ -53,6 +60,8 @@ def test_resume_skips_completed_tickets(tmp_path):
         dataset=dataset,
         prompt_version="triage_v1",
         output_path=output_path,
+        experiment=experiment,
+        resume=True,
     )
 
     assert len(service.calls) == 1
@@ -72,11 +81,26 @@ def test_resume_rejects_modified_dataset(tmp_path):
             "error": None,
         }
     ]
+    
+    original_dataset = [
+        {
+            "id": "T001",
+            "query": "My invoice is incorrect.",
+            "expected_category": "billing",
+        }
+    ]
+
+    original_experiment = build_experiment_identity(
+        dataset=original_dataset,
+        prompt_version="triage_v1",
+        provider_name="gemini",
+        model_name="test-model",
+    )
 
     save_checkpoint(
         results=original_results,
         output_path=output_path,
-        prompt_version="triage_v1",
+        experiment=original_experiment,
     )
 
     modified_dataset = [
@@ -86,6 +110,12 @@ def test_resume_rejects_modified_dataset(tmp_path):
             "expected_category": "technical",
         }
     ]
+    modified_experiment = build_experiment_identity(
+        dataset=modified_dataset,
+        prompt_version="triage_v1",
+        provider_name="gemini",
+        model_name="test-model",
+    )
 
     service = FakeService()
 
@@ -95,6 +125,8 @@ def test_resume_rejects_modified_dataset(tmp_path):
             dataset=modified_dataset,
             prompt_version="triage_v1",
             output_path=output_path,
+            experiment=modified_experiment,
+            resume=True,
         )
 
     assert service.calls == []
@@ -220,3 +252,46 @@ def test_experiment_identity_changes_with_provider(tmp_path, monkeypatch):
     )
 
     assert gemini != openrouter
+
+
+def test_fresh_refuses_existing_output(tmp_path):
+    output_path = tmp_path / "results.json"
+    output_path.write_text("existing report", encoding="utf-8")
+
+    dataset = []
+    experiment = build_experiment_identity(
+        dataset, "triage_v1", "gemini", "test-model"
+    )
+
+    service = FakeService()
+
+    with pytest.raises(FileExistsError):
+        run_evaluation(
+            service=service,
+            dataset=dataset,
+            prompt_version="triage_v1",
+            output_path=output_path,
+            experiment=experiment,
+            resume=False,
+        )
+
+    assert output_path.read_text(encoding="utf-8") == "existing report"
+
+
+def test_resume_requires_existing_checkpoint(tmp_path):
+    output_path = tmp_path / "missing.json"
+
+    dataset = []
+    experiment = build_experiment_identity(
+        dataset, "triage_v1", "gemini", "test-model"
+    )
+
+    with pytest.raises(FileNotFoundError):
+        run_evaluation(
+            service=FakeService(),
+            dataset=dataset,
+            prompt_version="triage_v1",
+            output_path=output_path,
+            experiment=experiment,
+            resume=True,
+        )
