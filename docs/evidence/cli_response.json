@@ -1,0 +1,9 @@
+{
+  "answer": "Para recuperar tu contraseña, ingresa a la pantalla de inicio de sesión de Nubbix y haz clic en la opción '¿Olvidaste tu contraseña?'. Sigue las instrucciones que enviaremos a tu correo electrónico registrado para restablecerla de forma segura.",
+  "confidence": 1.0,
+  "category": "account",
+  "actions": [
+    "Enviar enlace de restablecimiento de contraseña al correo del cliente",
+    "Verificar estado de la cuenta en el sistema"
+  ]
+}
