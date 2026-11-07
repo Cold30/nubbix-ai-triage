@@ -45,13 +45,13 @@ def validate_input(query: str) -> str:
     cleaned_query = query.strip()
 
     if not cleaned_query:
-        raise GuardrailError("Support request cannot be empty")
+        raise GuardrailError("La consulta de soporte no puede estar vacía.")
 
     if len(cleaned_query) > 5000:
-        raise GuardrailError("Support request exceeds maximum length")
+        raise GuardrailError("La consulta de soporte supera los 5000 caracteres.")
     
     if detect_prompt_injection(cleaned_query):
-        raise GuardrailError("Potential prompt injection detected")
+        raise GuardrailError("Se detectó un posible intento de prompt injection.")
 
     return cleaned_query
 
@@ -62,7 +62,7 @@ def validate_output(result: TriageResponse) -> TriageResponse:
     for pattern in UNVERIFIED_ACTION_PATTERNS:
         if re.search(pattern, answer):
             raise GuardrailError(
-                "Response claims an unverified completed action"
+                "La respuesta afirma una operación realizada que no se puede verificar."
             )
 
     return result
