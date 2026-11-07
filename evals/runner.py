@@ -3,6 +3,7 @@ import argparse
 import json
 import sys
 import time
+import hashlib
 from pathlib import Path
 
 from dotenv import load_dotenv
@@ -13,6 +14,7 @@ from src.guardrails import GuardrailError
 from src.provider_factory import create_provider
 from src.triage import TriageService
 from src.metrics import MetricsLogger
+from src.prompting import PROMPTS_DIR
 
 def save_checkpoint( results: list[dict], output_path: Path, prompt_version: str, ) -> None:
     """Save partial evaluation results to disk."""
@@ -63,6 +65,34 @@ def load_dataset(path: Path) -> list[dict]:
             for line in file
             if line.strip()
         ]
+
+def calculate_dataset_hash(dataset: list[dict]) -> str:
+    """Return a stable SHA-256 fingerprint of a labeled dataset."""
+    serialized = json.dumps(
+        dataset,
+        sort_keys=True,
+        ensure_ascii=False,
+        separators=(",", ":"),
+    )
+
+    return hashlib.sha256(
+        serialized.encode("utf-8")
+    ).hexdigest()
+
+def build_experiment_identity( dataset: list[dict], prompt_version: str, provider_name: str, model_name: str, ) -> dict:
+    """Build an identity for a reproducible evaluation."""
+    prompt_path = PROMPTS_DIR / f"{prompt_version}.yaml"
+    prompt_content = prompt_path.read_bytes()
+
+    prompt_hash = hashlib.sha256(prompt_content).hexdigest()
+
+    return {
+        "provider": provider_name,
+        "model": model_name,
+        "prompt_version": prompt_version,
+        "prompt_hash": prompt_hash,
+        "dataset_hash": calculate_dataset_hash(dataset),
+    }
 
 
 def run_evaluation( service: TriageService, dataset: list[dict], prompt_version: str, output_path: Path, delay_seconds: float = 0.0, ) -> dict:
