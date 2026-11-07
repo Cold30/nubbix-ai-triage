@@ -75,6 +75,6 @@ def test_gemini_rejects_empty_response(monkeypatch):
 
     with pytest.raises(
         PermanentLLMError,
-        match="empty response",
+        match="respuesta vacía",
     ):
         provider.generate("Simulated support ticket")

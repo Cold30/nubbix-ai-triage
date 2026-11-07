@@ -79,6 +79,6 @@ def test_openrouter_rejects_empty_choices(monkeypatch):
 
     with pytest.raises(
         PermanentLLMError,
-        match="no response choices",
+        match="alternativas de respuesta",
     ):
         provider.generate("Simulated support ticket")
