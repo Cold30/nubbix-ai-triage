@@ -11,3 +11,15 @@ class LLMResponse:
     latency_s: float
     provider: str
     model: str
+
+
+class LLMProviderError(Exception):
+    """Base exception for LLM provider failures."""
+
+
+class TransientLLMError(LLMProviderError):
+    """A temporary failure that may succeed when retried."""
+
+
+class PermanentLLMError(LLMProviderError):
+    """A failure that should not be retried automatically."""

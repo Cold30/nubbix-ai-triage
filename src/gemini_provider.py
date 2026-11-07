@@ -1,7 +1,9 @@
 import time
 
 from google import genai
-from src.llm_client import LLMResponse
+from google.genai import errors
+
+from src.llm_client import ( LLMResponse, PermanentLLMError, TransientLLMError, )
 
 class GeminiProvider:
     """Handles text generation using the Google Gemini API."""
@@ -15,14 +17,32 @@ class GeminiProvider:
         """Generate a response and return normalized usage metrics."""
         start_time = time.perf_counter()
 
-        with genai.Client(api_key=self.api_key) as client:
-            response = client.models.generate_content(
-                model=self.model,
-                contents=prompt,
-                # response_format=,
-            )
+        try:
+            with genai.Client(api_key=self.api_key) as client:
+                response = client.models.generate_content(
+                    model=self.model,
+                    contents=prompt,
+                )
+
+        except errors.APIError as error:
+            status_code = getattr(error, "code", None)
+
+            if status_code == 429 or (
+                isinstance(status_code, int) and status_code >= 500
+            ):
+                raise TransientLLMError(
+                    f"Gemini temporary HTTP error: {status_code}"
+                ) from error
+
+            raise PermanentLLMError(
+                f"Gemini API error: {status_code}"
+            ) from error
 
         latency = time.perf_counter() - start_time
+        
+        if not response.text:
+            raise PermanentLLMError( "Gemini returned an empty response" )
+        
         usage = response.usage_metadata
 
         return LLMResponse(
