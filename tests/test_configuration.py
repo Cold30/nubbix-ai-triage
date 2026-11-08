@@ -69,5 +69,5 @@ def test_generation_defaults_and_retry_validation(monkeypatch):
 
 
 def test_unknown_provider_has_actionable_error():
-    with pytest.raises(ValueError, match="gemini u openrouter"):
+    with pytest.raises(ValueError, match="gemini, openrouter u openai"):
         create_provider("unknown")

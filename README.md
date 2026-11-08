@@ -8,6 +8,8 @@ Nubbix AI Triage es una aplicación CLI desarrollada en Python que utiliza model
 
 El sistema permite intercambiar proveedores LLM sin modificar la lógica de negocio y utiliza Pydantic para validar la estructura de las respuestas generadas.
 
+Gemini y OpenRouter siguen siendo los dos proveedores principales. OpenAI nativo es un tercer proveedor opcional mediante Responses API; no se necesita una clave OpenAI para usar los otros dos.
+
 ### Objetivos
 
 - Clasificar consultas de soporte en cuatro categorías.
@@ -23,7 +25,7 @@ El sistema permite intercambiar proveedores LLM sin modificar la lógica de nego
 - Pydantic
 - Google Gemini API
 - OpenRouter API
-- OpenAI Python SDK (utilizado para la integración compatible de OpenRouter)
+- OpenAI Python SDK (Responses API nativa y la integración compatible de OpenRouter)
 - PyYAML
 - python-dotenv
 - pytest
@@ -39,6 +41,7 @@ El sistema separa las siguientes responsabilidades:
 | `src/configuration.py` | Validación de credenciales y parámetros de generación |
 | `src/gemini_provider.py` | Integración con Gemini |
 | `src/openrouter_provider.py` | Integración con OpenRouter |
+| `src/openai_provider.py` | Integración opcional con OpenAI Responses API |
 | `src/llm_client.py` | Contrato de respuesta normalizada del proveedor |
 | `src/prompting.py` | Carga y construcción de prompts YAML |
 | `src/triage.py` | Orquestación, validación y reintentos |
@@ -94,7 +97,7 @@ El valor de `confidence` es una estimación generada por el modelo; no debe inte
 
 - Python 3.12
 - Conexión a Internet
-- API key de Gemini y/o OpenRouter
+- API key del proveedor que se elija: Gemini, OpenRouter u OpenAI opcional
 
 Clonar el repositorio y acceder al directorio del proyecto.
 
@@ -124,18 +127,20 @@ Ejecutá los comandos desde la raíz del repositorio. Solo se exige la clave y e
 | `LLM_PROVIDER` | `gemini` | Proveedor de la CLI y del runner; `--provider` tiene prioridad |
 | `GEMINI_API_KEY`, `GEMINI_MODEL` | Sin valor | Obligatorios al seleccionar Gemini |
 | `OPENROUTER_API_KEY`, `OPENROUTER_MODEL` | Sin valor | Obligatorios al seleccionar OpenRouter |
-| `LLM_TEMPERATURE` | `0.1` | Número finito entre 0 y 2, enviado a ambos proveedores |
-| `LLM_MAX_OUTPUT_TOKENS` | `512` | Entero positivo; Gemini recibe `max_output_tokens`, OpenRouter `max_tokens` |
+| `OPENAI_API_KEY`, `OPENAI_MODEL` | Sin valor en el código | Obligatorios solo al seleccionar `openai`; `.env.example` propone `gpt-6-luna` |
+| `OPENAI_REASONING_EFFORT` | Obligatorio para `openai` | `none`, `low`, `medium`, `high`, `xhigh` o `max`; el ejemplo selecciona `low` |
+| `LLM_TEMPERATURE` | `0.1` | Número finito entre 0 y 2; Gemini/OpenRouter lo reciben siempre, OpenAI solo con esfuerzo `none` |
+| `LLM_MAX_OUTPUT_TOKENS` | `512` | Entero positivo; Gemini y OpenAI reciben `max_output_tokens`, OpenRouter `max_tokens` |
 | `LLM_TIMEOUT_SECONDS` | `30` | Timeout por solicitud en segundos, finito y al menos `0.001`; Gemini lo recibe en milisegundos |
 | `LLM_MAX_RETRIES` | `2` | Reintentos adicionales por JSON inválido; el ejemplo configura `3` |
 | `PROMPT_VERSION` | `triage_v1` | Versión predeterminada de la CLI; el runner exige `--prompt-version` |
 | `METRICS_PATH` | `data/metrics.jsonl` | Archivo append-only de métricas |
 
-Completá los modelos con identificadores habilitados para tu cuenta. El identificador Gemini de la evidencia histórica es `gemini-3.5-flash-lite`; no se confirmó su disponibilidad actual. Las variables `OPENAI_API_KEY` y `OPENAI_MODEL` solo corresponden al script manual opcional `tests/test_openai.py`, no a un tercer proveedor de la aplicación.
+Completá los modelos con identificadores habilitados para tu cuenta. El identificador Gemini de la evidencia histórica es `gemini-3.5-flash-lite`; no se confirmó su disponibilidad actual. La integración nativa OpenAI valida únicamente `gpt-6-luna`, cuya documentación pública se verificó; otros nombres se rechazan hasta comprobar sus parámetros. Esto no confirma acceso a ese modelo en tu cuenta.
 
 Los límites admitidos por cada modelo pueden ser más estrechos que la validación compartida. El timeout es por solicitud y no una fecha límite global: los reintentos y esperas pueden extender el tiempo total.
 
-Los SDK no agregan reintentos: OpenRouter usa `max_retries=0` y Gemini `HttpRetryOptions(attempts=1)`. `retry_transient()` permite dos reintentos adicionales con esperas de 1 y 2 segundos. HTTP 408, 429, 5xx y fallos temporales de transporte se consideran transitorios; otros errores HTTP son permanentes. Un error permanente no se reintenta. Con `LLM_MAX_RETRIES=3`, el límite combinado es de hasta 12 solicitudes de generación si se combinan fallos transitorios y respuestas JSON inválidas.
+Los SDK no agregan reintentos: OpenAI/OpenRouter usan `max_retries=0` y Gemini `HttpRetryOptions(attempts=1)`. `retry_transient()` permite dos reintentos adicionales con esperas de 1 y 2 segundos. HTTP 408, 429, 5xx y fallos temporales de transporte se consideran transitorios; otros errores HTTP son permanentes. En OpenAI, un HTTP 429 por créditos agotados, límites de gasto o cuota se clasifica como permanente, no como rate limit temporal. Un error permanente no se reintenta. Con `LLM_MAX_RETRIES=3`, el límite combinado es de hasta 12 solicitudes de generación si se combinan fallos transitorios y respuestas JSON inválidas.
 
 ## 6. Uso de la CLI
 
@@ -157,6 +162,32 @@ python -m src.main classify "No puedo iniciar sesión" --provider openrouter
 python -m src.main classify "No puedo descargar un reporte" --provider gemini --prompt-version triage_v2
 ```
 
+### OpenAI opcional: GPT-6 Luna
+
+Configurá `OPENAI_API_KEY`, `OPENAI_MODEL=gpt-6-luna` y `OPENAI_REASONING_EFFORT=low` en tu `.env`. El código no crea credenciales ni comprueba el saldo de tu cuenta. Una suscripción a ChatGPT no implica créditos de API; tampoco se afirma que Luna sea gratuito ni esté habilitado para tu proyecto.
+
+La integración usa `client.responses.create`, el endpoint oficial `https://api.openai.com/v1`, timeout explícito, `service_tier=default` y `store=false`. No agrega herramientas ni cambia los templates de prompts. Pydantic y los guardrails existentes siguen validando el resultado.
+
+Según la [documentación oficial de GPT-6](https://developers.openai.com/api/docs/guides/latest-model), al activar razonamiento se deben omitir controles de muestreo incompatibles. Con esfuerzo distinto de `none` no se envían `temperature`, `top_p` ni logprobs; con `none` se envía la temperatura configurada. La identidad de la evaluación guarda los parámetros efectivos: cambiar una temperatura omitida no invalida el checkpoint, pero cambiar el esfuerzo sí.
+
+El límite de salida incluye razonamiento y texto visible. Con 512 tokens podría agotarse antes de formar el JSON. Para una prueba real se puede configurar `LLM_MAX_OUTPUT_TOKENS=2048`, sin garantía de que alcance para cualquier solicitud y con posible aumento de costo. El máximo documentado del modelo es 128000. Si la respuesta queda incompleta se devuelve un error permanente que indica revisar presupuesto y esfuerzo; no se devuelve texto parcial ni se reintenta ampliando el presupuesto automáticamente.
+
+Estos comandos son **reales, opcionales y potencialmente pagos**; no forman parte de los tests offline:
+
+```powershell
+python -m src.main classify "No puedo ingresar a mi cuenta" --provider openai
+python -m evals.runner --provider openai --prompt-version triage_v1 --fresh --output evals/results/openai_50_v1.json
+python -m evals.runner --provider openai --prompt-version triage_v1 --resume --output evals/results/openai_50_v1.json
+```
+
+Las pruebas nativas simuladas se ejecutan sin claves ni conexión:
+
+```powershell
+python -m pytest tests/test_openai_provider.py tests/test_openai_configuration.py tests/test_openai_cli.py -q
+```
+
+Se verificaron el [modelo y sus límites](https://developers.openai.com/api/docs/models/gpt-6-luna) y los [errores de API](https://developers.openai.com/api/docs/guides/error-codes) el 7 de noviembre de 2026. No se realizaron solicitudes al modelo ni se verificaron permisos, facturación, créditos o restricciones de nivel de servicio de la cuenta. `store=false` no sustituye las políticas de retención de datos del proveedor.
+
 ## 7. Estrategias de Prompt Engineering
 
 Se implementaron dos versiones de prompts en español.
@@ -173,30 +204,36 @@ El objetivo experimental es comprobar si los ejemplos mejoran el comportamiento 
 
 ## 8. Evaluaciones
 
-Se construyó un dataset de 30 consultas etiquetadas en `evals/dataset.jsonl`.
+El dataset de clasificación `evals/dataset.jsonl` contiene **50 consultas etiquetadas**: los 30 tickets originales (`T001`–`T030`) se conservaron sin cambiar textos, etiquetas ni IDs y se agregaron exactamente 20 (`T031`–`T050`). Son ejemplos sintéticos redactados para el proyecto, no tickets reales ni predicciones de un LLM.
 
 Distribución:
 
-| Categoría | Tickets |
-|---|---:|
-| billing | 8 |
-| technical | 8 |
-| account | 7 |
-| other | 7 |
-| **Total** | **30** |
+| Categoría | Originales | Nuevos | Total |
+|---|---:|---:|---:|
+| billing | 8 | 5 | 13 |
+| technical | 8 | 5 | 13 |
+| account | 7 | 5 | 12 |
+| other | 7 | 5 | 12 |
+| **Total** | **30** | **20** | **50** |
+
+La ampliación incluye solicitudes formales e informales, errores de escritura, mensajes breves y descripciones detalladas de pymes de LATAM. Los casos mixtos mantienen una sola etiqueta según la resolución principal solicitada, sin inferir causas no expresadas ni clasificar solo por palabras clave. La [política de etiquetado](docs/dataset_labeling.md) documenta los criterios y las razones de cada etiqueta nueva; algunos casos requieren revisión humana antes de congelar el conjunto para la comparación final.
+
+Los ejemplos se revisaron para evitar duplicados y reformulaciones cercanas; las comprobaciones automáticas de unicidad no garantizan diversidad semántica. El conjunto sigue siendo pequeño y de autoría única. Los tickets adversariales permanecen separados en `evals/adversarial.jsonl`.
+
+**Todavía no hay resultados sobre los 50 tickets.** Las tablas de resultados de esta sección corresponden exclusivamente a los 30 originales. Para evaluar la ampliación, usá `--fresh` con archivos de salida nuevos para ambas versiones; no reanudes checkpoints del dataset de 30, porque cambió el hash. Conservá el mismo modelo y configuración, revisá las etiquetas antes de ejecutar y no las ajustes según qué prompt gane.
 
 ### Ejecutar evaluaciones
 
 Zero-shot:
 
 ```powershell
-python -m evals.runner --provider gemini --prompt-version triage_v1 --fresh --output evals/results/submission_v1.json
+python -m evals.runner --provider gemini --prompt-version triage_v1 --fresh --output evals/results/submission_50_v1.json
 ```
 
 Few-shot:
 
 ```powershell
-python -m evals.runner --provider gemini --prompt-version triage_v2 --fresh --output evals/results/submission_v2.json
+python -m evals.runner --provider gemini --prompt-version triage_v2 --fresh --output evals/results/submission_50_v2.json
 ```
 
 Estos comandos hacen llamadas reales y consumen cuota. No se ejecutan como parte de las pruebas offline. Los reportes históricos `evals/results_v1.json` y `evals/results_v2.json` se conservan sin cambios.
@@ -204,7 +241,7 @@ Estos comandos hacen llamadas reales y consumen cuota. No se ejecutan como parte
 `--fresh` exige que la salida no exista: nunca sobrescribe una evaluación. `--resume` exige un checkpoint existente y compatible, y omite los tickets ya registrados:
 
 ```powershell
-python -m evals.runner --provider gemini --prompt-version triage_v1 --resume --output evals/results/submission_v1.json
+python -m evals.runner --provider gemini --prompt-version triage_v1 --resume --output evals/results/submission_50_v1.json
 ```
 
 El runner valida campos, categorías e IDs únicos antes de generar. La identidad incluye hashes del dataset y del archivo de prompt, proveedor, modelo, temperatura, límite de tokens, timeout y políticas de reintento. No incluye credenciales. Un cambio de identidad rechaza la reanudación. Los reportes antiguos sin esta identidad no pueden reanudarse: elegí una salida nueva.
@@ -235,7 +272,7 @@ No se observó una mejora de accuracy al incorporar ejemplos few-shot.
 
 Esto no demuestra que ambas estrategias sean equivalentes en cualquier escenario. El dataset incluye principalmente consultas relativamente claras y no representa toda la complejidad de una operación de soporte real.
 
-Para una evaluación más rigurosa será necesario incorporar casos ambiguos y adversariales.
+La ampliación actual agrega casos mixtos y ambiguos, pero todavía no se evaluó con proveedores reales. La suite adversarial se mide por separado y no integra estos scores de clasificación.
 
 ### Métricas operativas históricas
 
@@ -281,6 +318,12 @@ Un costo desconocido se representa mediante `null` y no se confunde con un model
 El repositorio ya contiene `docs/evidence/cli_response.json` y `docs/evidence/cli_metrics.jsonl`, con una respuesta de categoría `account` y una línea Gemini con timestamp UTC, 176 tokens de entrada, 123 de salida y 299 totales. Se conservaron sin cambios: son evidencia histórica del proyecto, no una ejecución nueva ni una verificación independiente de su procedencia. La consulta y los parámetros completos de esa ejecución no están registrados.
 
 Las métricas se registran por respuesta recibida y ronda de validación; no contabilizan individualmente las llamadas fallidas por transporte. La latencia corresponde a la llamada del proveedor, no al tiempo total con backoff. Las tarifas de `src/pricing.py` son referencias sin validación externa reciente; tampoco se distinguen todas las clases de tokens facturables ni uso ausente de uso cero.
+
+### Estimación OpenAI verificada
+
+Las tarifas añadidas para GPT-6 Luna se contrastaron con los [precios oficiales](https://developers.openai.com/api/docs/pricing) y la [ficha del modelo](https://developers.openai.com/api/docs/models/gpt-6-luna) el **7 de noviembre de 2026**: Standard, texto, USD **0,10 por millón de tokens de entrada** y **0,50 por millón de salida** para entradas de hasta 272000 tokens. Por encima de ese umbral se aplican los multiplicadores documentados de 2 para entrada y 1,5 para salida en toda la solicitud.
+
+El adaptador conserva `usage.input_tokens`, `usage.output_tokens` y `usage.total_tokens`, junto con el modelo devuelto y la latencia. Los tokens de razonamiento ya forman parte de `output_tokens`: no se suman dos veces. El contrato común no conserva el desglose de caché; la estimación no incorpora descuentos por lectura, cargos por escritura de caché, recargos regionales ni impuestos, y no representa una factura. Un nombre de modelo devuelto sin tarifa verificada conserva costo `null`. Los precios históricos de los otros proveedores no se actualizaron ni se atribuyen a esta verificación.
 
 ## 10. Guardrails y limitaciones
 
@@ -333,11 +376,11 @@ Ejecutar las pruebas unitarias:
 python -m pytest -q
 ```
 
-La suite automatizada utiliza mocks y proveedores simulados. `tests/conftest.py` bloquea resolución DNS y conexiones socket durante cada test para evitar llamadas de red accidentales. Las pruebas cubren configuración, argumentos enviados a los SDK, clasificación de errores, límites de reintentos, validación del dataset, checkpoints atómicos, reanudación y métricas adversariales.
+La suite automatizada utiliza mocks y proveedores simulados. `tests/conftest.py` bloquea resolución DNS y conexiones socket durante cada test para evitar llamadas de red accidentales. Las pruebas cubren configuración, argumentos enviados a los SDK, clasificación de errores, límites de reintentos, validación del dataset, checkpoints atómicos, reanudación y métricas adversariales. `tests/test_dataset.py` comprueba los 50 tickets, la distribución por categoría, la preservación exacta de los 30 originales y la unicidad de IDs y consultas normalizadas.
 
 Las pruebas manuales de integración con proveedores deben ejecutarse de forma explícita, ya que pueden consumir cuotas o créditos.
 
-Los archivos manuales `test_gemini.py`, `test_openrouter.py`, `test_openai.py` y `test_triage_integration.py` contienen funciones `main()` protegidas; pytest no las ejecuta. Invocarlas directamente sí puede llamar a APIs. Las pruebas offline no validan autenticación, existencia de modelos, compatibilidad remota de parámetros, precios vigentes, respuestas reales ni una instalación nueva desde PyPI.
+Los archivos manuales `test_gemini.py`, `test_openrouter.py`, `test_openai.py` y `test_triage_integration.py` contienen funciones `main()` protegidas; pytest no las ejecuta. Invocarlas directamente sí puede llamar a APIs. `test_openai.py` es un script histórico de Chat Completions; para la integración nativa actual usá la CLI con `--provider openai`. Las pruebas offline no validan autenticación, acceso al modelo en una cuenta, compatibilidad remota efectiva, respuestas reales ni una instalación nueva desde PyPI. Los precios de Luna se contrastaron con documentación pública, sin verificar facturación real.
 
 ## 12. Mejoras futuras
 

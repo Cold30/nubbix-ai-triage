@@ -18,7 +18,7 @@ from src.provider_factory import create_provider
 from src.triage import TriageService
 from src.metrics import MetricsLogger
 from src.prompting import PROMPTS_DIR
-from src.configuration import GenerationSettings, environment_integer
+from src.configuration import ConfigurationError, GenerationSettings, OpenAISettings, environment_integer
 from src.llm_client import LLMProviderError
 
 
@@ -143,6 +143,8 @@ def build_experiment_identity(
 
     prompt_hash = hashlib.sha256(prompt_content).hexdigest()
 
+    if provider_name == "openai" and not isinstance(settings, OpenAISettings):
+        raise ConfigurationError("La identidad OpenAI requiere los parámetros efectivos de razonamiento.")
     settings = settings or GenerationSettings()
     return {
         "identity_version": 2,
@@ -251,7 +253,7 @@ def main() -> None:
 
     parser.add_argument(
         "--provider",
-        choices=["gemini", "openrouter"],
+        choices=["gemini", "openrouter", "openai"],
         default=os.getenv("LLM_PROVIDER", "gemini"),
     )
 

@@ -64,3 +64,43 @@ class GenerationSettings:
     def generation_parameters(self) -> dict:
         """Return only parameters sent to the generation endpoint."""
         return {"temperature": self.temperature, "max_output_tokens": self.max_output_tokens}
+
+
+@dataclass(frozen=True)
+class OpenAISettings(GenerationSettings):
+    """Supported GPT-6 Luna parameters for the native Responses endpoint."""
+
+    reasoning_effort: str = "low"
+
+    def __post_init__(self) -> None:
+        super().__post_init__()
+        if self.reasoning_effort not in {"none", "low", "medium", "high", "xhigh", "max"}:
+            raise ConfigurationError(
+                "OPENAI_REASONING_EFFORT debe ser none, low, medium, high, xhigh o max."
+            )
+        if self.max_output_tokens > 128_000:
+            raise ConfigurationError("GPT-6 Luna admite como máximo 128000 tokens de salida.")
+
+    @classmethod
+    def from_environment(cls) -> "OpenAISettings":
+        """Require an explicit effort only when native OpenAI is selected."""
+        effort = required_environment("OPENAI_REASONING_EFFORT")
+        common = GenerationSettings.from_environment()
+        return cls(
+            temperature=common.temperature,
+            max_output_tokens=common.max_output_tokens,
+            timeout_s=common.timeout_s,
+            reasoning_effort=effort,
+        )
+
+    def generation_parameters(self) -> dict:
+        """Omit unsupported sampling controls when reasoning is enabled."""
+        parameters = {
+            "max_output_tokens": self.max_output_tokens,
+            "reasoning": {"effort": self.reasoning_effort},
+            "service_tier": "default",
+            "store": False,
+        }
+        if self.reasoning_effort == "none":
+            parameters["temperature"] = self.temperature
+        return parameters

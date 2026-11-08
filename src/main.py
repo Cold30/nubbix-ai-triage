@@ -39,7 +39,7 @@ def main():
 
     classify_parser.add_argument(
         "--provider",
-        choices=["gemini", "openrouter"],
+        choices=["gemini", "openrouter", "openai"],
         default=os.getenv("LLM_PROVIDER", "gemini"),
     )
 
