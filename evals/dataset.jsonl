@@ -1,4 +1,3 @@
-
 {"id":"T001","query":"Me llegó una factura con un importe mayor al de mi plan contratado. ¿Podrían revisarla?","expected_category":"billing"}
 {"id":"T002","query":"Actualicé mi tarjeta de crédito, pero el pago de la suscripción sigue apareciendo como rechazado.","expected_category":"billing"}
 {"id":"T003","query":"Quiero cancelar mi suscripción antes de que se cobre el próximo mes.","expected_category":"billing"}
@@ -29,3 +28,23 @@
 {"id":"T028","query":"¿Tienen algún canal para enviar sugerencias sobre nuevas funcionalidades?","expected_category":"other"}
 {"id":"T029","query":"¿Dónde puedo consultar las novedades y próximas actualizaciones del producto?","expected_category":"other"}
 {"id":"T030","query":"Quisiera saber si Nubbix participará en algún evento tecnológico este año.","expected_category":"other"}
+{"id":"T031","query":"Dimos de baja a tres personas a mitad de mes, pero el resumen sigue contando los diez puestos. Los accesos ya están cerrados; necesitamos saber qué importe corresponde pagar por esos días.","expected_category":"billing"}
+{"id":"T032","query":"hola, el resumen dice 40 dólares y en la tarjeta veo otro monto en pesoss. no digo q esté mal, me explican qué conversión e impuestos usaron? somos de argentina","expected_category":"billing"}
+{"id":"T033","query":"Buen día. Compras autorizó el servicio por un año, aunque Tesorería solo puede transferir en cuotas mensuales. Antes de aceptar la propuesta necesitamos confirmar si pueden emitir los vencimientos de esa manera.","expected_category":"billing"}
+{"id":"T034","query":"Cambiamos la razón social y el CUIT en nuestros datos, pero el comprobante de Nubbix ya emitido salió a nombre de la empresa anterior. ¿Cómo hacemos para corregir ese documento sin tocar los usuarios?","expected_category":"billing"}
+{"id":"T035","query":"¿Pueden separar en dos comprobantes el abono que pagamos entre casa central y sucursal? Usamos un solo espacio de trabajo y queremos mantenerlo así; cada administración necesita rendir su parte.","expected_category":"billing"}
+{"id":"T036","query":"Cargué 12,50 como costo de un insumo y al volver a abrirlo figura 1250. Lo repetimos desde dos computadoras y pasa igual. Si uso punto en vez de coma queda bien, pero necesitamos trabajar con el formato local.","expected_category":"technical"}
+{"id":"T037","query":"En el cierre de nuestra sucursal de Lima faltan las ventas de la última hora, aunque sí aparecen al buscar cada operación. El mismo día visto desde la oficina de Buenos Aires da otro total. ¿Pueden revisar cómo se está tomando el horario?","expected_category":"technical"}
+{"id":"T038","query":"desde el celu saco la foto del remito, le doy adjuntar y queda un cuadrado blanco. con una imagen de la galeria sí anda. android, empezó esta semana y nos pasa a varios del depósito","expected_category":"technical"}
+{"id":"T039","query":"Estamos incorporando gente y el enlace de la invitación abre una página en blanco. Para descartar permisos lo abrió también la administradora con su sesión iniciada y ocurrió lo mismo en otro navegador. Necesitamos que revisen ese enlace.","expected_category":"technical"}
+{"id":"T040","query":"tenia la misma cotización abierta en 2 pestañas. guardé una, después la otra y quedaron dos versiones distintas con el mismo número. como recupero lo último que escribimos sin perder los renglones?","expected_category":"technical"}
+{"id":"T041","query":"La persona que figura como titular dejó la empresa. El equipo sigue trabajando normalmente, pero necesitamos que nuestra nueva responsable pueda autorizar altas y bajas en su lugar. ¿Qué documentación piden para transferir esa responsabilidad?","expected_category":"account"}
+{"id":"T042","query":"Sumamos un cajero a la sucursal norte y al revisar su perfil vimos que puede consultar también los movimientos de la sur. Por una decisión interna queremos limitarlo a su local. ¿Quién puede ajustar ese alcance?","expected_category":"account"}
+{"id":"T043","query":"dejé mi sesión abierta en la compu compartida del local y ya me fui. puedo cerrarla desde acá sin bloquear a todos?","expected_category":"account"}
+{"id":"T044","query":"La deuda que suspendía el servicio ya está regularizada y mis compañeros pueden entrar. Mi usuario lo había desactivado el administrador durante ese período y sigue así. Necesito que me indiquen cómo volver a habilitarlo.","expected_category":"account"}
+{"id":"T045","query":"Terminó el contrato con quien configuró la integración. Todo sigue sincronizando, pero no queremos que conserve la credencial de servicio que le dimos. ¿Cómo la reemplazamos y dejamos sin acceso la anterior?","expected_category":"account"}
+{"id":"T046","query":"Estamos revisando proveedores para una cooperativa de Uruguay. Antes de compartir información de los socios, el área legal pide saber en qué países se alojan los datos y cuánto tiempo se conservan después de terminar el servicio.","expected_category":"other"}
+{"id":"T047","query":"Una compañera usa lector de pantalla y navega solo con teclado. Todavía no contratamos Nubbix: ¿tienen información sobre accesibilidad para decidir si puede trabajar con la herramienta?","expected_category":"other"}
+{"id":"T048","query":"buenas, en semana de feriados de uruguay quién atiende si necesitamos ayuda fuera de hora? estamos organizando las guardias del negocio","expected_category":"other"}
+{"id":"T049","query":"Para la prueba comercial nos pidieron traer un caso de uso: hoy emitimos a Chile y Perú con otra herramienta. ¿Nubbix permite armar comprobantes en más de una moneda dentro de la misma empresa?","expected_category":"other"}
+{"id":"T050","query":"no me deja seguir con lo de ayer, me dan una mano?","expected_category":"other"}
