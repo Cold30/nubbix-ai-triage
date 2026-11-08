@@ -220,7 +220,7 @@ La ampliación incluye solicitudes formales e informales, errores de escritura, 
 
 Los ejemplos se revisaron para evitar duplicados y reformulaciones cercanas; las comprobaciones automáticas de unicidad no garantizan diversidad semántica. El conjunto sigue siendo pequeño y de autoría única. Los tickets adversariales permanecen separados en `evals/adversarial.jsonl`.
 
-**Todavía no hay resultados sobre los 50 tickets.** Las tablas de resultados de esta sección corresponden exclusivamente a los 30 originales. Para evaluar la ampliación, usá `--fresh` con archivos de salida nuevos para ambas versiones; no reanudes checkpoints del dataset de 30, porque cambió el hash. Conservá el mismo modelo y configuración, revisá las etiquetas antes de ejecutar y no las ajustes según qué prompt gane.
+La **comparación final Gemini sobre 50 tickets** está documentada en [docs/evidence/gemini_50_comparison.md](docs/evidence/gemini_50_comparison.md), con fuentes, hashes, metodología y límites. Las tablas históricas de 30 casos se conservan por separado más abajo. Para repetir la evaluación, usá `--fresh` con archivos de salida nuevos para ambas versiones; no reanudes checkpoints del dataset de 30, porque cambió el hash. Conservá el mismo modelo y configuración y no ajustes las etiquetas según qué prompt gane.
 
 ### Ejecutar evaluaciones
 
@@ -250,11 +250,38 @@ Cada checkpoint y el reporte final se escriben mediante un archivo temporal en e
 
 La pausa predeterminada es de seis segundos; `--delay-seconds 0` la desactiva. El tiempo de espera entre tickets no modifica el prompt y no integra la identidad del experimento.
 
-### Resultados obtenidos
+### Comparación final Gemini: 50 tickets
+
+El 8 de noviembre de 2026 se auditaron offline los reportes `evals/results/gemini_50_v1.json` y `gemini_50_v2.json`, junto con sus métricas locales separadas. Ambas identidades registran `gemini-3.5-flash-lite`, temperatura 0.1, límite de 512 tokens, timeout de 30 s, cero reintentos SDK, dos transitorios adicionales y tres de validación. Los únicos campos distintos son versión y hash del prompt; los hashes del dataset coinciden con el conjunto actual y ambos reportes contienen sus 50 IDs únicos.
+
+| Categoría | Zero-shot v1 | Few-shot v2 |
+|---|---:|---:|
+| billing | 100% (13/13) | 100% (13/13) |
+| technical | 100% (13/13) | 100% (13/13) |
+| account | 91,67% (11/12) | 91,67% (11/12) |
+| other | 83,33% (10/12) | 83,33% (10/12) |
+| **Accuracy global** | **94% (47/50)** | **94% (47/50)** |
+
+| Métrica de respuestas registradas | v1 | v2 |
+|---|---:|---:|
+| Respuestas API registradas | 50 | 50 |
+| Tokens de entrada | 9431 | 14881 |
+| Tokens de salida | 8495 | 8132 |
+| Tokens totales | 17926 | 23013 |
+| Latencia promedio por respuesta | 1,968332 s | 2,032609 s |
+| Costo total **estimado**, USD | 0,0240668 | 0,0247943 |
+
+Las 50 predicciones coinciden entre estrategias, incluidos los tres errores: **T045** (`account` → `technical`), **T049** y **T050** (`other` → `technical`). Sus fronteras de etiquetado ya estaban documentadas; no se cambiaron etiquetas tras observar las predicciones.
+
+Se conserva **v1 como estrategia predeterminada para esta entrega**: mismo score observado, menor complejidad y menos tokens totales. v2 usó 4,27% menos tokens de salida, pero 57,79% más de entrada y 28,38% más tokens totales; el costo estimado subió 3,02% y la latencia media observada 3,27%. Una sola corrida por estrategia sobre 50 casos sintéticos no demuestra significancia estadística, equivalencia ni superioridad general.
+
+Cada JSONL contiene 50 filas con `attempt=1`, sin errores finales reportados ni déficit por cantidad. **Esto no prueba cero fallos de transporte ni una correspondencia individual uno a uno:** los intentos fallidos y los IDs de ticket/request/run no se registran. Los costos usan las tarifas locales, no facturas, y la latencia no incluye todo el tiempo end-to-end. Los archivos operativos permanecen fuera de Git; se publica únicamente el [informe agregado y sus limitaciones](docs/evidence/gemini_50_comparison.md).
+
+### Resultados históricos: 30 tickets
 
 Las siguientes mediciones corresponden a ejecuciones reales con Gemini sobre el mismo dataset de 30 tickets.
 
-Son resultados históricos aportados por el proyecto, no mediciones repetidas durante esta actualización offline. No contienen hashes ni parámetros suficientes para demostrar qué contenido exacto de v2 se usó. La versión actual de v2 conserva las instrucciones de v1; los reportes anteriores no permiten atribuirle automáticamente el mismo resultado. Se requiere una comparación nueva, con el mismo modelo y configuración, para evaluar los prompts actuales.
+Son resultados históricos aportados por el proyecto, no mediciones repetidas durante esta auditoría offline. No contienen hashes ni parámetros suficientes para demostrar qué contenido exacto de v2 se usó. No se atribuyen automáticamente a los prompts actuales ni se combinan con la comparación de 50 casos presentada arriba.
 
 | Categoría | Zero-shot v1 | Few-shot v2 |
 |---|---:|---:|
@@ -272,7 +299,7 @@ No se observó una mejora de accuracy al incorporar ejemplos few-shot.
 
 Esto no demuestra que ambas estrategias sean equivalentes en cualquier escenario. El dataset incluye principalmente consultas relativamente claras y no representa toda la complejidad de una operación de soporte real.
 
-La ampliación actual agrega casos mixtos y ambiguos, pero todavía no se evaluó con proveedores reales. La suite adversarial se mide por separado y no integra estos scores de clasificación.
+La comparación de 50 casos presentada arriba incorpora los tickets mixtos y ambiguos de la ampliación. La suite adversarial se mide por separado y no integra estos scores de clasificación.
 
 ### Métricas operativas históricas
 
@@ -287,13 +314,13 @@ Los registros acumulados en `data/metrics.jsonl` mostraron:
 
 Estas cifras incluyen pruebas anteriores y posibles reintentos, por lo que no constituyen una comparación controlada de costos de los 30 tickets.
 
-### Conclusión provisional
+### Conclusión de la evidencia histórica
 
-Zero-shot constituye una alternativa simple y suficiente para clasificar correctamente el dataset actual.
+En las corridas históricas, zero-shot clasificó correctamente los 30 tickets iniciales.
 
 Few-shot también obtiene el máximo accuracy y presenta menores promedios históricos de tokens y latencia, aunque los registros disponibles no permiten atribuir esas diferencias exclusivamente a la estrategia de prompting.
 
-No se declara un ganador definitivo. Se mantiene v1 como opción predeterminada por simplicidad, con respaldo limitado al dataset histórico; no se afirma que sea superior a v2. La temperatura explícita tampoco garantiza determinismo ni fija una revisión inmutable del modelo remoto.
+Esas cifras históricas no permiten declarar un ganador. La recomendación actual de conservar v1 se apoya en la comparación separada de 50 casos, sin afirmar superioridad general. La temperatura explícita tampoco garantiza determinismo ni fija una revisión inmutable del modelo remoto.
 
 ## 9. Métricas y observabilidad
 
@@ -394,7 +421,7 @@ Los archivos manuales `test_gemini.py`, `test_openrouter.py`, `test_openai.py` y
 
 ### Pendientes para la entrega académica
 
-Antes de presentar, ejecutar voluntariamente una CLI real con cada proveedor y nuevas evals v1/v2 en archivos nuevos, revisar sus métricas y actualizar la interpretación con esos resultados. Confirmar instalación limpia en Python 3.12 y acceso público al repositorio. La evidencia de CLI existente no prueba los parámetros incorporados en esta actualización.
+La evidencia Gemini de 50 casos ya está auditada y enlazada en esta sección. Antes de presentar, revisar la adjudicación de los casos ambiguos y distinguir lo verificado por artefactos de lo no observable en los logs. Las integraciones remotas de otros proveedores, la facturación efectiva y cualquier cambio posterior al código o dataset requieren su propia verificación. La evidencia histórica de CLI no prueba por sí sola los parámetros de todas las corridas actuales.
 
 El bonus adversarial tiene dataset y medición offline; no debe presentarse como validación end-to-end de seguridad. No se implementaron FastAPI, bases de datos ni otros frameworks. La rúbrica menciona extra credits como comparativa de modelos, caché o judge; esta actualización no agrega esos extras ni interpreta la existencia de dos proveedores como una comparación de modelos.
 
