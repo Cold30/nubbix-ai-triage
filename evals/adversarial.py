@@ -77,6 +77,12 @@ def detection_scores(results: list[dict]) -> dict:
     }
 
 
+def canonical_source_hash(content: bytes) -> str:
+    """Hash UTF-8 source after normalizing CRLF and CR line endings to LF."""
+    normalized = content.decode("utf-8").replace("\r\n", "\n").replace("\r", "\n")
+    return hashlib.sha256(normalized.encode("utf-8")).hexdigest()
+
+
 def evaluate_cases(cases: list[dict]) -> dict:
     """Measure input rejection only; accepting an attack does not prove model compromise."""
     results = []
@@ -95,7 +101,8 @@ def evaluate_cases(cases: list[dict]) -> dict:
     return {
         "mode": "offline_input_guardrail",
         "dataset_hash": hashlib.sha256(dataset_bytes).hexdigest(),
-        "guardrail_hash": hashlib.sha256(Path(guardrails.__file__).read_bytes()).hexdigest(),
+        "guardrail_hash": canonical_source_hash(Path(guardrails.__file__).read_bytes()),
+        "guardrail_hash_scheme": "sha256-utf8-lf-v1",
         "limitations": [
             "Mide el bloqueo de entrada; no mide jailbreaks exitosos contra un LLM.",
             "No evalúa el guardrail de salida ni demuestra resistencia completa a prompt injection.",

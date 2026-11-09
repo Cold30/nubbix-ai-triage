@@ -1,0 +1,1077 @@
+{
+  "schema_version": 1,
+  "scope": "historical_classification_predictions_only",
+  "runs": [
+    {
+      "run_id": "gemini_50_v1",
+      "status": "completed",
+      "source_sha256": "ffe1deec247ce326103f61c8d7346c5b2914bb539d1c17738990e0dee1500a72",
+      "experiment": {
+        "identity_version": 2,
+        "provider": "gemini",
+        "model": "gemini-3.5-flash-lite",
+        "prompt_version": "triage_v1",
+        "prompt_hash": "bdc7df1462bc7b70bac749facf61f49a2dd934e481909b835ad49138f33c393c",
+        "dataset_hash": "20f2cc2f1097e9843155e92551d87a399766236033265daae38f209c90a57c44",
+        "generation": {
+          "temperature": 0.1,
+          "max_output_tokens": 512
+        },
+        "request_policy": {
+          "timeout_s": 30.0,
+          "sdk_retries": 0,
+          "transient_retries": 2,
+          "validation_retries": 3
+        }
+      },
+      "expected_total": 50,
+      "recorded_total": 50,
+      "correct_recorded": 47,
+      "results": [
+        {
+          "id": "T001",
+          "expected_category": "billing",
+          "predicted_category": "billing"
+        },
+        {
+          "id": "T002",
+          "expected_category": "billing",
+          "predicted_category": "billing"
+        },
+        {
+          "id": "T003",
+          "expected_category": "billing",
+          "predicted_category": "billing"
+        },
+        {
+          "id": "T004",
+          "expected_category": "technical",
+          "predicted_category": "technical"
+        },
+        {
+          "id": "T005",
+          "expected_category": "technical",
+          "predicted_category": "technical"
+        },
+        {
+          "id": "T006",
+          "expected_category": "technical",
+          "predicted_category": "technical"
+        },
+        {
+          "id": "T007",
+          "expected_category": "account",
+          "predicted_category": "account"
+        },
+        {
+          "id": "T008",
+          "expected_category": "account",
+          "predicted_category": "account"
+        },
+        {
+          "id": "T009",
+          "expected_category": "other",
+          "predicted_category": "other"
+        },
+        {
+          "id": "T010",
+          "expected_category": "other",
+          "predicted_category": "other"
+        },
+        {
+          "id": "T011",
+          "expected_category": "billing",
+          "predicted_category": "billing"
+        },
+        {
+          "id": "T012",
+          "expected_category": "billing",
+          "predicted_category": "billing"
+        },
+        {
+          "id": "T013",
+          "expected_category": "billing",
+          "predicted_category": "billing"
+        },
+        {
+          "id": "T014",
+          "expected_category": "billing",
+          "predicted_category": "billing"
+        },
+        {
+          "id": "T015",
+          "expected_category": "billing",
+          "predicted_category": "billing"
+        },
+        {
+          "id": "T016",
+          "expected_category": "technical",
+          "predicted_category": "technical"
+        },
+        {
+          "id": "T017",
+          "expected_category": "technical",
+          "predicted_category": "technical"
+        },
+        {
+          "id": "T018",
+          "expected_category": "technical",
+          "predicted_category": "technical"
+        },
+        {
+          "id": "T019",
+          "expected_category": "technical",
+          "predicted_category": "technical"
+        },
+        {
+          "id": "T020",
+          "expected_category": "technical",
+          "predicted_category": "technical"
+        },
+        {
+          "id": "T021",
+          "expected_category": "account",
+          "predicted_category": "account"
+        },
+        {
+          "id": "T022",
+          "expected_category": "account",
+          "predicted_category": "account"
+        },
+        {
+          "id": "T023",
+          "expected_category": "account",
+          "predicted_category": "account"
+        },
+        {
+          "id": "T024",
+          "expected_category": "account",
+          "predicted_category": "account"
+        },
+        {
+          "id": "T025",
+          "expected_category": "account",
+          "predicted_category": "account"
+        },
+        {
+          "id": "T026",
+          "expected_category": "other",
+          "predicted_category": "other"
+        },
+        {
+          "id": "T027",
+          "expected_category": "other",
+          "predicted_category": "other"
+        },
+        {
+          "id": "T028",
+          "expected_category": "other",
+          "predicted_category": "other"
+        },
+        {
+          "id": "T029",
+          "expected_category": "other",
+          "predicted_category": "other"
+        },
+        {
+          "id": "T030",
+          "expected_category": "other",
+          "predicted_category": "other"
+        },
+        {
+          "id": "T031",
+          "expected_category": "billing",
+          "predicted_category": "billing"
+        },
+        {
+          "id": "T032",
+          "expected_category": "billing",
+          "predicted_category": "billing"
+        },
+        {
+          "id": "T033",
+          "expected_category": "billing",
+          "predicted_category": "billing"
+        },
+        {
+          "id": "T034",
+          "expected_category": "billing",
+          "predicted_category": "billing"
+        },
+        {
+          "id": "T035",
+          "expected_category": "billing",
+          "predicted_category": "billing"
+        },
+        {
+          "id": "T036",
+          "expected_category": "technical",
+          "predicted_category": "technical"
+        },
+        {
+          "id": "T037",
+          "expected_category": "technical",
+          "predicted_category": "technical"
+        },
+        {
+          "id": "T038",
+          "expected_category": "technical",
+          "predicted_category": "technical"
+        },
+        {
+          "id": "T039",
+          "expected_category": "technical",
+          "predicted_category": "technical"
+        },
+        {
+          "id": "T040",
+          "expected_category": "technical",
+          "predicted_category": "technical"
+        },
+        {
+          "id": "T041",
+          "expected_category": "account",
+          "predicted_category": "account"
+        },
+        {
+          "id": "T042",
+          "expected_category": "account",
+          "predicted_category": "account"
+        },
+        {
+          "id": "T043",
+          "expected_category": "account",
+          "predicted_category": "account"
+        },
+        {
+          "id": "T044",
+          "expected_category": "account",
+          "predicted_category": "account"
+        },
+        {
+          "id": "T045",
+          "expected_category": "account",
+          "predicted_category": "technical"
+        },
+        {
+          "id": "T046",
+          "expected_category": "other",
+          "predicted_category": "other"
+        },
+        {
+          "id": "T047",
+          "expected_category": "other",
+          "predicted_category": "other"
+        },
+        {
+          "id": "T048",
+          "expected_category": "other",
+          "predicted_category": "other"
+        },
+        {
+          "id": "T049",
+          "expected_category": "other",
+          "predicted_category": "technical"
+        },
+        {
+          "id": "T050",
+          "expected_category": "other",
+          "predicted_category": "technical"
+        }
+      ],
+      "accuracy": 0.94,
+      "per_category": {
+        "billing": {
+          "correct": 13,
+          "total": 13
+        },
+        "technical": {
+          "correct": 13,
+          "total": 13
+        },
+        "account": {
+          "correct": 11,
+          "total": 12
+        },
+        "other": {
+          "correct": 10,
+          "total": 12
+        }
+      }
+    },
+    {
+      "run_id": "gemini_50_v2",
+      "status": "completed",
+      "source_sha256": "69e44670e5262f3b78ec23790984a45044703896ce82fc624e8a96277975e949",
+      "experiment": {
+        "identity_version": 2,
+        "provider": "gemini",
+        "model": "gemini-3.5-flash-lite",
+        "prompt_version": "triage_v2",
+        "prompt_hash": "061fb777a8740d7b87f58450eac465a38cf9e7cac4fb69c8a1160ee7403e01f1",
+        "dataset_hash": "20f2cc2f1097e9843155e92551d87a399766236033265daae38f209c90a57c44",
+        "generation": {
+          "temperature": 0.1,
+          "max_output_tokens": 512
+        },
+        "request_policy": {
+          "timeout_s": 30.0,
+          "sdk_retries": 0,
+          "transient_retries": 2,
+          "validation_retries": 3
+        }
+      },
+      "expected_total": 50,
+      "recorded_total": 50,
+      "correct_recorded": 47,
+      "results": [
+        {
+          "id": "T001",
+          "expected_category": "billing",
+          "predicted_category": "billing"
+        },
+        {
+          "id": "T002",
+          "expected_category": "billing",
+          "predicted_category": "billing"
+        },
+        {
+          "id": "T003",
+          "expected_category": "billing",
+          "predicted_category": "billing"
+        },
+        {
+          "id": "T004",
+          "expected_category": "technical",
+          "predicted_category": "technical"
+        },
+        {
+          "id": "T005",
+          "expected_category": "technical",
+          "predicted_category": "technical"
+        },
+        {
+          "id": "T006",
+          "expected_category": "technical",
+          "predicted_category": "technical"
+        },
+        {
+          "id": "T007",
+          "expected_category": "account",
+          "predicted_category": "account"
+        },
+        {
+          "id": "T008",
+          "expected_category": "account",
+          "predicted_category": "account"
+        },
+        {
+          "id": "T009",
+          "expected_category": "other",
+          "predicted_category": "other"
+        },
+        {
+          "id": "T010",
+          "expected_category": "other",
+          "predicted_category": "other"
+        },
+        {
+          "id": "T011",
+          "expected_category": "billing",
+          "predicted_category": "billing"
+        },
+        {
+          "id": "T012",
+          "expected_category": "billing",
+          "predicted_category": "billing"
+        },
+        {
+          "id": "T013",
+          "expected_category": "billing",
+          "predicted_category": "billing"
+        },
+        {
+          "id": "T014",
+          "expected_category": "billing",
+          "predicted_category": "billing"
+        },
+        {
+          "id": "T015",
+          "expected_category": "billing",
+          "predicted_category": "billing"
+        },
+        {
+          "id": "T016",
+          "expected_category": "technical",
+          "predicted_category": "technical"
+        },
+        {
+          "id": "T017",
+          "expected_category": "technical",
+          "predicted_category": "technical"
+        },
+        {
+          "id": "T018",
+          "expected_category": "technical",
+          "predicted_category": "technical"
+        },
+        {
+          "id": "T019",
+          "expected_category": "technical",
+          "predicted_category": "technical"
+        },
+        {
+          "id": "T020",
+          "expected_category": "technical",
+          "predicted_category": "technical"
+        },
+        {
+          "id": "T021",
+          "expected_category": "account",
+          "predicted_category": "account"
+        },
+        {
+          "id": "T022",
+          "expected_category": "account",
+          "predicted_category": "account"
+        },
+        {
+          "id": "T023",
+          "expected_category": "account",
+          "predicted_category": "account"
+        },
+        {
+          "id": "T024",
+          "expected_category": "account",
+          "predicted_category": "account"
+        },
+        {
+          "id": "T025",
+          "expected_category": "account",
+          "predicted_category": "account"
+        },
+        {
+          "id": "T026",
+          "expected_category": "other",
+          "predicted_category": "other"
+        },
+        {
+          "id": "T027",
+          "expected_category": "other",
+          "predicted_category": "other"
+        },
+        {
+          "id": "T028",
+          "expected_category": "other",
+          "predicted_category": "other"
+        },
+        {
+          "id": "T029",
+          "expected_category": "other",
+          "predicted_category": "other"
+        },
+        {
+          "id": "T030",
+          "expected_category": "other",
+          "predicted_category": "other"
+        },
+        {
+          "id": "T031",
+          "expected_category": "billing",
+          "predicted_category": "billing"
+        },
+        {
+          "id": "T032",
+          "expected_category": "billing",
+          "predicted_category": "billing"
+        },
+        {
+          "id": "T033",
+          "expected_category": "billing",
+          "predicted_category": "billing"
+        },
+        {
+          "id": "T034",
+          "expected_category": "billing",
+          "predicted_category": "billing"
+        },
+        {
+          "id": "T035",
+          "expected_category": "billing",
+          "predicted_category": "billing"
+        },
+        {
+          "id": "T036",
+          "expected_category": "technical",
+          "predicted_category": "technical"
+        },
+        {
+          "id": "T037",
+          "expected_category": "technical",
+          "predicted_category": "technical"
+        },
+        {
+          "id": "T038",
+          "expected_category": "technical",
+          "predicted_category": "technical"
+        },
+        {
+          "id": "T039",
+          "expected_category": "technical",
+          "predicted_category": "technical"
+        },
+        {
+          "id": "T040",
+          "expected_category": "technical",
+          "predicted_category": "technical"
+        },
+        {
+          "id": "T041",
+          "expected_category": "account",
+          "predicted_category": "account"
+        },
+        {
+          "id": "T042",
+          "expected_category": "account",
+          "predicted_category": "account"
+        },
+        {
+          "id": "T043",
+          "expected_category": "account",
+          "predicted_category": "account"
+        },
+        {
+          "id": "T044",
+          "expected_category": "account",
+          "predicted_category": "account"
+        },
+        {
+          "id": "T045",
+          "expected_category": "account",
+          "predicted_category": "technical"
+        },
+        {
+          "id": "T046",
+          "expected_category": "other",
+          "predicted_category": "other"
+        },
+        {
+          "id": "T047",
+          "expected_category": "other",
+          "predicted_category": "other"
+        },
+        {
+          "id": "T048",
+          "expected_category": "other",
+          "predicted_category": "other"
+        },
+        {
+          "id": "T049",
+          "expected_category": "other",
+          "predicted_category": "technical"
+        },
+        {
+          "id": "T050",
+          "expected_category": "other",
+          "predicted_category": "technical"
+        }
+      ],
+      "accuracy": 0.94,
+      "per_category": {
+        "billing": {
+          "correct": 13,
+          "total": 13
+        },
+        "technical": {
+          "correct": 13,
+          "total": 13
+        },
+        "account": {
+          "correct": 11,
+          "total": 12
+        },
+        "other": {
+          "correct": 10,
+          "total": 12
+        }
+      }
+    },
+    {
+      "run_id": "openrouter_50_v1",
+      "status": "completed",
+      "source_sha256": "5e456b122e05ad1116e03752c69a888ca6421828780be7666ffd1cc61f713187",
+      "experiment": {
+        "identity_version": 2,
+        "provider": "openrouter",
+        "model": "nvidia/nemotron-3.5-lightning:free",
+        "prompt_version": "triage_v1",
+        "prompt_hash": "bdc7df1462bc7b70bac749facf61f49a2dd934e481909b835ad49138f33c393c",
+        "dataset_hash": "20f2cc2f1097e9843155e92551d87a399766236033265daae38f209c90a57c44",
+        "generation": {
+          "temperature": 0.1,
+          "max_output_tokens": 4096
+        },
+        "request_policy": {
+          "timeout_s": 30.0,
+          "sdk_retries": 0,
+          "transient_retries": 2,
+          "validation_retries": 2
+        }
+      },
+      "expected_total": 50,
+      "recorded_total": 50,
+      "correct_recorded": 47,
+      "results": [
+        {
+          "id": "T001",
+          "expected_category": "billing",
+          "predicted_category": "billing"
+        },
+        {
+          "id": "T002",
+          "expected_category": "billing",
+          "predicted_category": "billing"
+        },
+        {
+          "id": "T003",
+          "expected_category": "billing",
+          "predicted_category": "billing"
+        },
+        {
+          "id": "T004",
+          "expected_category": "technical",
+          "predicted_category": "technical"
+        },
+        {
+          "id": "T005",
+          "expected_category": "technical",
+          "predicted_category": "technical"
+        },
+        {
+          "id": "T006",
+          "expected_category": "technical",
+          "predicted_category": "technical"
+        },
+        {
+          "id": "T007",
+          "expected_category": "account",
+          "predicted_category": "account"
+        },
+        {
+          "id": "T008",
+          "expected_category": "account",
+          "predicted_category": "account"
+        },
+        {
+          "id": "T009",
+          "expected_category": "other",
+          "predicted_category": "other"
+        },
+        {
+          "id": "T010",
+          "expected_category": "other",
+          "predicted_category": "other"
+        },
+        {
+          "id": "T011",
+          "expected_category": "billing",
+          "predicted_category": "billing"
+        },
+        {
+          "id": "T012",
+          "expected_category": "billing",
+          "predicted_category": "billing"
+        },
+        {
+          "id": "T013",
+          "expected_category": "billing",
+          "predicted_category": "billing"
+        },
+        {
+          "id": "T014",
+          "expected_category": "billing",
+          "predicted_category": "billing"
+        },
+        {
+          "id": "T015",
+          "expected_category": "billing",
+          "predicted_category": "billing"
+        },
+        {
+          "id": "T016",
+          "expected_category": "technical",
+          "predicted_category": "technical"
+        },
+        {
+          "id": "T017",
+          "expected_category": "technical",
+          "predicted_category": "technical"
+        },
+        {
+          "id": "T018",
+          "expected_category": "technical",
+          "predicted_category": "technical"
+        },
+        {
+          "id": "T019",
+          "expected_category": "technical",
+          "predicted_category": "technical"
+        },
+        {
+          "id": "T020",
+          "expected_category": "technical",
+          "predicted_category": "technical"
+        },
+        {
+          "id": "T021",
+          "expected_category": "account",
+          "predicted_category": "account"
+        },
+        {
+          "id": "T022",
+          "expected_category": "account",
+          "predicted_category": "account"
+        },
+        {
+          "id": "T023",
+          "expected_category": "account",
+          "predicted_category": "account"
+        },
+        {
+          "id": "T024",
+          "expected_category": "account",
+          "predicted_category": "account"
+        },
+        {
+          "id": "T025",
+          "expected_category": "account",
+          "predicted_category": "account"
+        },
+        {
+          "id": "T026",
+          "expected_category": "other",
+          "predicted_category": "other"
+        },
+        {
+          "id": "T027",
+          "expected_category": "other",
+          "predicted_category": "other"
+        },
+        {
+          "id": "T028",
+          "expected_category": "other",
+          "predicted_category": "other"
+        },
+        {
+          "id": "T029",
+          "expected_category": "other",
+          "predicted_category": "other"
+        },
+        {
+          "id": "T030",
+          "expected_category": "other",
+          "predicted_category": "other"
+        },
+        {
+          "id": "T031",
+          "expected_category": "billing",
+          "predicted_category": "billing"
+        },
+        {
+          "id": "T032",
+          "expected_category": "billing",
+          "predicted_category": "billing"
+        },
+        {
+          "id": "T033",
+          "expected_category": "billing",
+          "predicted_category": "billing"
+        },
+        {
+          "id": "T034",
+          "expected_category": "billing",
+          "predicted_category": "billing"
+        },
+        {
+          "id": "T035",
+          "expected_category": "billing",
+          "predicted_category": "billing"
+        },
+        {
+          "id": "T036",
+          "expected_category": "technical",
+          "predicted_category": "technical"
+        },
+        {
+          "id": "T037",
+          "expected_category": "technical",
+          "predicted_category": "technical"
+        },
+        {
+          "id": "T038",
+          "expected_category": "technical",
+          "predicted_category": "technical"
+        },
+        {
+          "id": "T039",
+          "expected_category": "technical",
+          "predicted_category": "technical"
+        },
+        {
+          "id": "T040",
+          "expected_category": "technical",
+          "predicted_category": "technical"
+        },
+        {
+          "id": "T041",
+          "expected_category": "account",
+          "predicted_category": "account"
+        },
+        {
+          "id": "T042",
+          "expected_category": "account",
+          "predicted_category": "account"
+        },
+        {
+          "id": "T043",
+          "expected_category": "account",
+          "predicted_category": "account"
+        },
+        {
+          "id": "T044",
+          "expected_category": "account",
+          "predicted_category": "account"
+        },
+        {
+          "id": "T045",
+          "expected_category": "account",
+          "predicted_category": "technical"
+        },
+        {
+          "id": "T046",
+          "expected_category": "other",
+          "predicted_category": "other"
+        },
+        {
+          "id": "T047",
+          "expected_category": "other",
+          "predicted_category": "other"
+        },
+        {
+          "id": "T048",
+          "expected_category": "other",
+          "predicted_category": "other"
+        },
+        {
+          "id": "T049",
+          "expected_category": "other",
+          "predicted_category": "billing"
+        },
+        {
+          "id": "T050",
+          "expected_category": "other",
+          "predicted_category": "technical"
+        }
+      ],
+      "accuracy": 0.94,
+      "per_category": {
+        "billing": {
+          "correct": 13,
+          "total": 13
+        },
+        "technical": {
+          "correct": 13,
+          "total": 13
+        },
+        "account": {
+          "correct": 11,
+          "total": 12
+        },
+        "other": {
+          "correct": 10,
+          "total": 12
+        }
+      }
+    },
+    {
+      "run_id": "openrouter_50_v2",
+      "status": "incomplete",
+      "source_sha256": "81169b47188b67335dd827acd4b04bf2ef4c647b0a926eb028eae8f6cd45a487",
+      "experiment": {
+        "identity_version": 2,
+        "provider": "openrouter",
+        "model": "nvidia/nemotron-3.5-lightning:free",
+        "prompt_version": "triage_v2",
+        "prompt_hash": "061fb777a8740d7b87f58450eac465a38cf9e7cac4fb69c8a1160ee7403e01f1",
+        "dataset_hash": "20f2cc2f1097e9843155e92551d87a399766236033265daae38f209c90a57c44",
+        "generation": {
+          "temperature": 0.1,
+          "max_output_tokens": 4096
+        },
+        "request_policy": {
+          "timeout_s": 30.0,
+          "sdk_retries": 0,
+          "transient_retries": 2,
+          "validation_retries": 2
+        }
+      },
+      "expected_total": 50,
+      "recorded_total": 29,
+      "correct_recorded": 29,
+      "results": [
+        {
+          "id": "T001",
+          "expected_category": "billing",
+          "predicted_category": "billing"
+        },
+        {
+          "id": "T002",
+          "expected_category": "billing",
+          "predicted_category": "billing"
+        },
+        {
+          "id": "T003",
+          "expected_category": "billing",
+          "predicted_category": "billing"
+        },
+        {
+          "id": "T004",
+          "expected_category": "technical",
+          "predicted_category": "technical"
+        },
+        {
+          "id": "T005",
+          "expected_category": "technical",
+          "predicted_category": "technical"
+        },
+        {
+          "id": "T006",
+          "expected_category": "technical",
+          "predicted_category": "technical"
+        },
+        {
+          "id": "T007",
+          "expected_category": "account",
+          "predicted_category": "account"
+        },
+        {
+          "id": "T008",
+          "expected_category": "account",
+          "predicted_category": "account"
+        },
+        {
+          "id": "T009",
+          "expected_category": "other",
+          "predicted_category": "other"
+        },
+        {
+          "id": "T010",
+          "expected_category": "other",
+          "predicted_category": "other"
+        },
+        {
+          "id": "T011",
+          "expected_category": "billing",
+          "predicted_category": "billing"
+        },
+        {
+          "id": "T012",
+          "expected_category": "billing",
+          "predicted_category": "billing"
+        },
+        {
+          "id": "T013",
+          "expected_category": "billing",
+          "predicted_category": "billing"
+        },
+        {
+          "id": "T014",
+          "expected_category": "billing",
+          "predicted_category": "billing"
+        },
+        {
+          "id": "T015",
+          "expected_category": "billing",
+          "predicted_category": "billing"
+        },
+        {
+          "id": "T016",
+          "expected_category": "technical",
+          "predicted_category": "technical"
+        },
+        {
+          "id": "T017",
+          "expected_category": "technical",
+          "predicted_category": "technical"
+        },
+        {
+          "id": "T018",
+          "expected_category": "technical",
+          "predicted_category": "technical"
+        },
+        {
+          "id": "T019",
+          "expected_category": "technical",
+          "predicted_category": "technical"
+        },
+        {
+          "id": "T020",
+          "expected_category": "technical",
+          "predicted_category": "technical"
+        },
+        {
+          "id": "T021",
+          "expected_category": "account",
+          "predicted_category": "account"
+        },
+        {
+          "id": "T022",
+          "expected_category": "account",
+          "predicted_category": "account"
+        },
+        {
+          "id": "T023",
+          "expected_category": "account",
+          "predicted_category": "account"
+        },
+        {
+          "id": "T024",
+          "expected_category": "account",
+          "predicted_category": "account"
+        },
+        {
+          "id": "T025",
+          "expected_category": "account",
+          "predicted_category": "account"
+        },
+        {
+          "id": "T026",
+          "expected_category": "other",
+          "predicted_category": "other"
+        },
+        {
+          "id": "T027",
+          "expected_category": "other",
+          "predicted_category": "other"
+        },
+        {
+          "id": "T028",
+          "expected_category": "other",
+          "predicted_category": "other"
+        },
+        {
+          "id": "T029",
+          "expected_category": "other",
+          "predicted_category": "other"
+        }
+      ],
+      "pending_total": 21,
+      "next_pending_id": "T030",
+      "reported_incident": {
+        "type": "HTTP 429",
+        "source": "user_reported",
+        "recorded_in_checkpoint": false
+      }
+    }
+  ]
+}

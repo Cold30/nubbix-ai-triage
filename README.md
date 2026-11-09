@@ -275,7 +275,15 @@ Las 50 predicciones coinciden entre estrategias, incluidos los tres errores: **T
 
 Se conserva **v1 como estrategia predeterminada para esta entrega**: mismo score observado, menor complejidad y menos tokens totales. v2 usó 4,27% menos tokens de salida, pero 57,79% más de entrada y 28,38% más tokens totales; el costo estimado subió 3,02% y la latencia media observada 3,27%. Una sola corrida por estrategia sobre 50 casos sintéticos no demuestra significancia estadística, equivalencia ni superioridad general.
 
-Cada JSONL contiene 50 filas con `attempt=1`, sin errores finales reportados ni déficit por cantidad. **Esto no prueba cero fallos de transporte ni una correspondencia individual uno a uno:** los intentos fallidos y los IDs de ticket/request/run no se registran. Los costos usan las tarifas locales, no facturas, y la latencia no incluye todo el tiempo end-to-end. Los archivos operativos permanecen fuera de Git; se publica únicamente el [informe agregado y sus limitaciones](docs/evidence/gemini_50_comparison.md).
+Cada JSONL contiene 50 filas con `attempt=1`, sin errores finales reportados ni déficit por cantidad. **Esto no prueba cero fallos de transporte ni una correspondencia individual uno a uno:** los intentos fallidos y los IDs de ticket/request/run no se registran. Los costos usan las tarifas locales, no facturas, y la latencia no incluye todo el tiempo end-to-end. Los archivos operativos permanecen fuera de Git; se publica el [informe agregado y sus limitaciones](docs/evidence/gemini_50_comparison.md) y, desde esta remediación, la evidencia de predicciones sanitizada enlazada a continuación.
+
+### Evidencia pública de proveedores: 50 tickets
+
+La [evidencia versionada de predicciones](docs/evidence/classification_runs_v1.json) contiene IDs, categorías esperadas y predichas y configuración de Gemini v1/v2 y OpenRouter v1: las tres corridas completas registran **47/50 (94%)**. No publica consultas, respuestas completas ni logs privados. Consultá el [alcance, procedencia y límites](docs/evidence/provider_evaluation_summary.md).
+
+OpenRouter v2 permanece **incompleto: 29/50 registrados, 29 correctos entre esos 29 y 21 pendientes**, con T030 como próximo ID. No hay accuracy final de 50 casos. El **HTTP 429 es un incidente reportado por el usuario, no un error registrado en el checkpoint**. Para reanudar se requiere la configuración original (4096 tokens y dos reintentos de validación, entre otros parámetros), distinta de Gemini; no se reanudó durante esta remediación.
+
+Estas predicciones son históricas y anteriores al ajuste del guardrail de salida. Sin las respuestas completas no se puede validar retrospectivamente ese ajuste: no se atribuyen estos scores al guardrail corregido ni se afirma que una nueva corrida dé el mismo resultado. Los originales y sus métricas permanecen intactos. La diferencia de configuración entre proveedores impide tratarlos como comparación controlada de modelos.
 
 ### Resultados históricos: 30 tickets
 
@@ -360,7 +368,7 @@ Se incorporaron validaciones para rechazar consultas vacías y textos que supera
 
 ### Salida
 
-Se implementaron comprobaciones deterministas para detectar algunas afirmaciones de operaciones completadas que el sistema no puede verificar.
+Se revisan `answer` y cada elemento de `actions` para detectar algunas afirmaciones de operaciones completadas que el sistema no puede verificar. La negación directa («No hemos procesado tu reembolso») no se trata como una afirmación positiva; una afirmación posterior en la misma respuesta sigue siendo rechazada. Las sugerencias al agente se conservan. Las reglas no interpretan todas las negaciones indirectas, citas, condicionales o paráfrasis y no verifican operaciones reales.
 
 ### Limitaciones conocidas
 
@@ -393,7 +401,7 @@ La medición offline guardada en `docs/evidence/adversarial_report.json` obtuvo:
 | Tickets legítimos bloqueados: falsos positivos | 2 / 4 (50%) |
 | Tickets legítimos aceptados | 2 / 4 |
 
-El reporte incluye hashes del dataset y del código del guardrail. Por ejemplo, el ataque A001 es rechazado antes de generar; la paráfrasis A009 pasa; la cita legítima B001 se bloquea por error. Esto mide el comportamiento real de las regex sin ocultar sus límites. Un ataque aceptado por el filtro no demuestra que el modelo lo obedecería; uno rechazado no demuestra protección frente a variantes. La suite no mide respuestas del LLM, exfiltraciones reales ni el guardrail de salida, y no prueba resistencia completa a prompt injection.
+El reporte incluye hashes del dataset y del código del guardrail. El hash de código usa `sha256-utf8-lf-v1`, normalizando CRLF y CR a LF para reproducirse entre plataformas. Se actualizaron exclusivamente esos metadatos tras la remediación; todos los resultados y scores de entrada permanecen iguales. Las pruebas comparan el reporte con fuentes equivalentes LF y CRLF. El [detalle de la remediación](docs/evidence/provider_evaluation_summary.md) documenta el cambio de procedencia y los hallazgos pendientes. Por ejemplo, el ataque A001 es rechazado antes de generar; la paráfrasis A009 pasa; la cita legítima B001 se bloquea por error. Esto mide el comportamiento real de las regex sin ocultar sus límites. Un ataque aceptado por el filtro no demuestra que el modelo lo obedecería; uno rechazado no demuestra protección frente a variantes. La suite no mide respuestas del LLM, exfiltraciones reales ni el guardrail de salida, y no prueba resistencia completa a prompt injection.
 
 ## 11. Testing
 

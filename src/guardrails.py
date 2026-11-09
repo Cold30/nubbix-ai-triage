@@ -33,7 +33,12 @@ UNVERIFIED_ACTION_PATTERNS = [
     r"\bhemos (realizado|procesado|emitido|aprobado)\b",
     r"\b(ya|hemos) (reembolsado|devuelto)\b",
     r"\btu contraseña (fue|ha sido) restablecida\b",
+    r"\b(?:el|tu) reembolso (?:ya )?(?:fue|ha sido) (?:procesado|emitido|aprobado)\b",
 ]
+
+DIRECT_NEGATION_PATTERN = re.compile(
+    r"\b(?:no|nunca|jamás)(?:\s+(?:lo|la|los|las|se|te|le|les|ya|todavía|aún))*\s*$"
+)
 
 
 class GuardrailError(ValueError):
@@ -57,12 +62,15 @@ def validate_input(query: str) -> str:
 
 def validate_output(result: TriageResponse) -> TriageResponse:
     """Reject responses claiming unverified completed operations."""
-    answer = result.answer.lower()
-
-    for pattern in UNVERIFIED_ACTION_PATTERNS:
-        if re.search(pattern, answer):
-            raise GuardrailError(
-                "La respuesta afirma una operación realizada que no se puede verificar."
-            )
+    for text in [result.answer, *result.actions]:
+        normalized = " ".join(text.lower().split())
+        for pattern in UNVERIFIED_ACTION_PATTERNS:
+            for match in re.finditer(pattern, normalized):
+                # Only direct negation applies; a separate affirmative claim still fails.
+                if DIRECT_NEGATION_PATTERN.search(normalized[:match.start()]):
+                    continue
+                raise GuardrailError(
+                    "La respuesta afirma una operación realizada que no se puede verificar."
+                )
 
     return result

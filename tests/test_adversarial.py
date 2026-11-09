@@ -5,7 +5,7 @@ from pathlib import Path
 
 import pytest
 
-from evals.adversarial import detection_scores, evaluate_cases, load_cases, main
+from evals.adversarial import canonical_source_hash, detection_scores, evaluate_cases, load_cases, main
 
 
 DATASET_PATH = Path(__file__).resolve().parents[1] / "evals" / "adversarial.jsonl"
@@ -44,6 +44,35 @@ def test_actual_guardrail_report_exposes_known_failures():
 def test_saved_evidence_matches_current_offline_measurement():
     path = DATASET_PATH.parents[1] / "docs" / "evidence" / "adversarial_report.json"
     assert json.loads(path.read_text(encoding="utf-8")) == evaluate_cases(load_cases(DATASET_PATH))
+
+
+def test_source_hash_is_independent_of_line_endings():
+    source = "# Código de prueba\nvalue = 1\n".encode("utf-8")
+    assert canonical_source_hash(source) == canonical_source_hash(source.replace(b"\n", b"\r\n"))
+    assert canonical_source_hash(source) == canonical_source_hash(source.replace(b"\n", b"\r"))
+    assert canonical_source_hash(source) != canonical_source_hash(source.replace(b"1", b"2"))
+
+
+def test_complete_report_matches_for_lf_and_crlf_source(monkeypatch):
+    from src import guardrails
+
+    source_path = Path(guardrails.__file__)
+    source = source_path.read_bytes().replace(b"\r\n", b"\n")
+    original_read_bytes = Path.read_bytes
+    reports = []
+    for ending in (b"\n", b"\r\n"):
+        content = source.replace(b"\n", ending)
+        monkeypatch.setattr(Path, "read_bytes", lambda path: content if path == source_path else original_read_bytes(path))
+        reports.append(evaluate_cases(load_cases(DATASET_PATH)))
+    assert reports[0] == reports[1]
+    assert reports[0]["guardrail_hash_scheme"] == "sha256-utf8-lf-v1"
+
+
+def test_input_detection_scores_remain_unchanged():
+    scores = evaluate_cases(load_cases(DATASET_PATH))["scores"]
+    assert {key: scores[key] for key in ("true_positives", "false_negatives", "false_positives", "true_negatives")} == {
+        "true_positives": 5, "false_negatives": 7, "false_positives": 2, "true_negatives": 2,
+    }
 
 
 def test_rejects_duplicate_case_ids(tmp_path):
