@@ -42,7 +42,7 @@ La salida ahora revisa `answer` y cada elemento de `actions`, contempla negació
 | Hallazgo recuperado de la auditoría | Estado tras esta remediación | Evidencia |
 |---|---|---|
 | Hash dependiente de CRLF/LF | Resuelto | Hash canónico, metadatos y regresión de reporte completo |
-| Predicciones de 50 casos ausentes de la evidencia pública | Resuelto localmente; pendiente publicar por el autor | JSON versionado, tres corridas completas y checkpoint parcial sanitizados |
+| Predicciones de 50 casos ausentes de la evidencia pública | Resuelto; publicado en GitHub en el commit `8430e3f` | JSON versionado, tres corridas completas y checkpoint parcial sanitizados |
 | Negación rechazada y `actions` sin inspeccionar | Resueltos los casos reproducidos | Tests de ambas propiedades, negación directa, afirmación posterior y sugerencias legítimas |
 | Filtro de entrada débil y citas benignas bloqueadas | Pendiente | 7 FN y 2 FP conservados y visibles |
 | Reanudación OpenRouter requiere configuración original | Documentado; corrida sin completar | Identidad preservada, 29/50 y próximo ID T030 |
